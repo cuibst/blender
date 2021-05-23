@@ -1,0 +1,6 @@
+/home/yikai/Documents/ComputerGraphicsProject/build/CMakeFiles/rebuild_cache.dir
+/home/yikai/Documents/ComputerGraphicsProject/build/CMakeFiles/edit_cache.dir
+/home/yikai/Documents/ComputerGraphicsProject/build/CMakeFiles/PA3.dir
+/home/yikai/Documents/ComputerGraphicsProject/build/deps/vecmath/CMakeFiles/rebuild_cache.dir
+/home/yikai/Documents/ComputerGraphicsProject/build/deps/vecmath/CMakeFiles/edit_cache.dir
+/home/yikai/Documents/ComputerGraphicsProject/build/deps/vecmath/CMakeFiles/vecmath.dir

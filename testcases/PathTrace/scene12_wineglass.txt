@@ -1,0 +1,137 @@
+
+PerspectiveCamera {
+    center 50 52 310.6
+    direction 0 -0.042612 -1
+    up 0 1 0
+    angle 30
+    width 1024
+    height 728
+    focalLength 131.4
+    aperture 0.2
+}
+
+Lights {
+    numLights 2
+    DirectionalLight {
+        direction -0.5 -0.5 -1
+        color 0.5 0.5 0.5 
+    }
+    PointLight {
+      position 50 60 70
+      color 12 12 12
+    }
+}
+
+Background {
+    color 0.1 0.2 0.7
+}
+
+Materials {
+    numMaterials 7
+    DiffuseMaterial { 
+        attenuation 0.75 0.25 0.25
+    }
+    DiffuseMaterial { 
+        attenuation 0.25 0.25 0.75 
+    }
+    DiffuseMaterial { 
+        attenuation 0.75 0.75 0.75 
+    }
+    DiffuseMaterial { 
+        attenuation 0.75 0.75 0.75
+    }
+    MetalMaterial {
+        attenuation 1 1 1
+    }
+    DielecMaterial {
+        attenuation 1 1 1
+        refractive 1.5
+    }
+    LightMaterial {
+        specularColor 12 12 12
+    }
+}
+
+Group {
+    numObjects 9
+    MaterialIndex 0
+    Plane {
+        normal 1 0.1 0
+        offset 1
+    }
+    MaterialIndex 1
+    Plane {
+        normal -1 0.1 0
+        offset -99 
+    }
+    MaterialIndex 2
+    Plane {
+        normal 0 0.1 1
+        offset 0
+    }
+    MaterialIndex 2
+    Plane {
+        normal 0 0.1 -1
+        offset -315.6
+    }
+    MaterialIndex 3
+    Plane {
+        normal 0 1 0
+        offset 0
+    }
+    MaterialIndex 2
+    Plane {
+        normal 0 -1 0
+        offset -81.6
+    }
+    MaterialIndex 4
+    Sphere {
+    center 27 16.5 47
+        radius 16.5
+    }
+    MaterialIndex 5
+    Transform {
+        ZRotate -8
+        Translate  70 30 150
+        UniformScale 5
+        RevSurface {
+            profile BsplineCurve {
+                controls
+                    [ 0.000000 -0.459543 0.0 ]
+                    [ 0.000000 -0.459544 0.0 ]
+                    [ 0.000000 -0.459545 0.0 ]
+                    [ -0.351882 -0.426747 0.0 ]
+                    [ -0.848656 -0.278898 0.0 ]
+                    [ -1.112097 0.084005 0.0 ]
+                    [ -1.164785 1.105511 0.0 ]
+                    [ -0.991667 2.328629 0.0 ]
+                    [ -1.029301 2.503360 0.0 ]
+                    [ -1.088800 2.345600 0.0 ]
+                    [ -1.278000 1.162800 0.0 ]
+                    [ -1.214800 0.055200 0.0 ]
+                    [ -0.915600 -0.381200 0.0 ]
+                    [ -0.380400 -0.622000 0.0 ]
+                    [ -0.144000 -0.968400 0.0 ]
+                    [ -0.096800 -1.480000 0.0 ]
+                    [ -0.128400 -2.112400 0.0 ]
+                    [ -0.317200 -2.202800 0.0 ]
+                    [ -0.994400 -2.262800 0.0 ]
+                    [ -1.214800 -2.323200 0.0 ]
+                    [ -1.199200 -2.398400 0.0 ]
+                    [ -1.057600 -2.458800 0.0 ]
+                    [ -0.711200 -2.458800 0.0 ]
+                    [ 0.000000 -2.458800 0.0 ]
+                    [ 0.000000 -2.458801 0.0 ]
+                    [ 0.000000 -2.458802 0.0 ]
+
+            }
+        }
+    }
+    MaterialIndex 6
+    XZRectangle {
+        points 27 60 73 80
+        offset 81.0
+        normal -1
+    }
+}
+
