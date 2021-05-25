@@ -1,6 +1,6 @@
-/home/yikai/Documents/ComputerGraphicsProject/build/CMakeFiles/rebuild_cache.dir
-/home/yikai/Documents/ComputerGraphicsProject/build/CMakeFiles/edit_cache.dir
-/home/yikai/Documents/ComputerGraphicsProject/build/CMakeFiles/PA3.dir
-/home/yikai/Documents/ComputerGraphicsProject/build/deps/vecmath/CMakeFiles/rebuild_cache.dir
-/home/yikai/Documents/ComputerGraphicsProject/build/deps/vecmath/CMakeFiles/edit_cache.dir
-/home/yikai/Documents/ComputerGraphicsProject/build/deps/vecmath/CMakeFiles/vecmath.dir
+/home/yikai/Documents/computer-graphics-project-2021-spring/build/CMakeFiles/rebuild_cache.dir
+/home/yikai/Documents/computer-graphics-project-2021-spring/build/CMakeFiles/edit_cache.dir
+/home/yikai/Documents/computer-graphics-project-2021-spring/build/CMakeFiles/PA3.dir
+/home/yikai/Documents/computer-graphics-project-2021-spring/build/deps/vecmath/CMakeFiles/rebuild_cache.dir
+/home/yikai/Documents/computer-graphics-project-2021-spring/build/deps/vecmath/CMakeFiles/edit_cache.dir
+/home/yikai/Documents/computer-graphics-project-2021-spring/build/deps/vecmath/CMakeFiles/vecmath.dir

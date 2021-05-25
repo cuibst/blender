@@ -1,11 +1,11 @@
 #include "plane.hpp"
 
-class BoundingBox : public Object3D {
+class BoundingBox {
 
     Plane slab[3][2];
 
 public:
-    explicit BoundingBox(float lowX, float highX, float lowY, float highY, float lowZ, float highZ): Object3D() {
+    explicit BoundingBox(float lowX, float highX, float lowY, float highY, float lowZ, float highZ) {
         slab[0][0] = Plane(Vector3f(-1,0,0), -lowX, nullptr);
         slab[0][1] = Plane(Vector3f(1,0,0), highX, nullptr);
         slab[1][0] = Plane(Vector3f(0,-1,0), -lowY, nullptr);
@@ -15,8 +15,8 @@ public:
         // std::cout<<"Bounding box: "<<lowX<<" "<<lowY<<" "<<lowZ<<" "<<highX<<" "<<highY<<" "<<highZ<<std::endl;
     }
 
-    bool intersect(const Ray &r, Hit &h, float tmin) override {
-        float mn = -1e38, mx = 1e38;
+    bool intersect(const Ray &r, float &mn, float &mx, float tmin) {
+        mn = -1e38, mx = 1e38;
         for(int i=0;i<3;i++)
         {
             Hit hitmin, hitmax;
@@ -43,11 +43,8 @@ public:
             mx = min(t2, mx);
         }
         // std::cout<<mn<<" "<<mx<<std::endl;
-        if(mn > mx)
+        if(mn > mx || mx < tmin)
             return false;
-        if(mn < tmin)
-            return false;
-        h.set(mn, nullptr, Vector3f(0,0,0));
         return true;
     }
 };

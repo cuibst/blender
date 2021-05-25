@@ -49,7 +49,7 @@ class PathTraceColorizer : public Colorizer
     {
         Group *group = parser.getGroup();
         Hit hit;
-        if(!group->intersect(r, hit, 0.0001))
+        if(!group->intersect(r, hit, 0))
             return parser.getBackgroundColor();
         Vector3f ret = hit.getMaterial()->Emission();
         Ray scatteredRay(r);
@@ -175,7 +175,7 @@ public:
                 }
                 img.SetPixel(x, y, color / sampleCnt);
             }
-            fprintf(stdout, "end rendering row %d with thread %d\n", x, omp_get_thread_num());
+            fprintf(stdout, "\rend rendering row %d with thread %d", x, omp_get_thread_num());
         }
         img.SaveBMP(outputFile);
     }

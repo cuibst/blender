@@ -1,4 +1,4 @@
-# Install script for directory: /home/yikai/Documents/ComputerGraphicsProject/deps/vecmath
+# Install script for directory: /home/yikai/Documents/computer-graphics-project-2021-spring/deps/vecmath
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

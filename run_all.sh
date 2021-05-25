@@ -34,5 +34,5 @@ cd ..
 # bin/PA3 testcases/RayCast/scene10_wineglass.txt output/scene10.bmp --raycast
 
 # Path trace testcases.
-bin/PA3 testcases/PathTrace/scene11_basic.txt output/scene11.bmp --pathtrace
+# bin/PA3 testcases/PathTrace/scene11_basic.txt output/scene11.bmp --pathtrace
 bin/PA3 testcases/PathTrace/scene12_wineglass.txt output/scene12.bmp --pathtrace

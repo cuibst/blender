@@ -40,7 +40,8 @@ public:
         // std::cout<<distCenterToRay<<std::endl;
         float length2 = sqrt(sqr(radius) - sqr(distCenterToRay)) * r.getDirection().length();
         float actualT = (length1 - length2);
-        // std::cout<<length1<<" "<<length2<<std::endl;
+        if(originToCenter.length() < radius)
+            actualT = length1 + length2;
         if(actualT < tmin + eps || actualT > h.getT())
             return false;
         Vector3f normal = (r.pointAtParameter(actualT) - center).normalized();

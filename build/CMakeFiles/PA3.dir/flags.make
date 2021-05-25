@@ -6,5 +6,5 @@ CXX_FLAGS = -fopenmp -g -O3 -Wno-deprecated-declarations -O3 -DNDEBUG   -std=gnu
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/yikai/Documents/ComputerGraphicsProject/include -I/usr/include/GL -I/home/yikai/Documents/ComputerGraphicsProject/deps/vecmath/include 
+CXX_INCLUDES = -I/home/yikai/Documents/computer-graphics-project-2021-spring/include -I/usr/include/GL -I/home/yikai/Documents/computer-graphics-project-2021-spring/deps/vecmath/include 
 

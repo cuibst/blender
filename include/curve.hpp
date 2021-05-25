@@ -17,6 +17,7 @@
 struct CurvePoint {
     Vector3f V; // Vertex
     Vector3f T; // Tangent  (unit)
+    float t;
 };
 
 class Curve : public Object3D {
@@ -103,6 +104,7 @@ public:
         CurvePoint ret;
         ret.T = Vector3f(0,0,0);
         ret.V = Vector3f(0,0,0);
+        ret.t = t;
         for(int i=0;i<=n;i++)
         {
             ret.T += bp[i] * controls[i];
@@ -190,6 +192,7 @@ public:
             res.V += b[_][k][i] * controls[i];
             res.T += bp[_][i] * controls[i];
         }
+        res.t = T;
         // for(int i=0;i<4;i++)
         //     delete[] b[i];
         // delete[] bp;

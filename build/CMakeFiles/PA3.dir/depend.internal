@@ -15,7 +15,7 @@ CMakeFiles/PA3.dir/src/camera_controller.cpp.o
  ../include/camera_controller.hpp
  ../include/ray.hpp
  ../include/utilities.hpp
- /home/yikai/Documents/ComputerGraphicsProject/src/camera_controller.cpp
+ /home/yikai/Documents/computer-graphics-project-2021-spring/src/camera_controller.cpp
  /usr/include/GL/freeglut_std.h
  /usr/include/GL/glut.h
 CMakeFiles/PA3.dir/src/image.cpp.o
@@ -29,7 +29,7 @@ CMakeFiles/PA3.dir/src/image.cpp.o
  ../deps/vecmath/include/vecio.h
  ../deps/vecmath/include/vecmath.h
  ../include/image.hpp
- /home/yikai/Documents/ComputerGraphicsProject/src/image.cpp
+ /home/yikai/Documents/computer-graphics-project-2021-spring/src/image.cpp
 CMakeFiles/PA3.dir/src/main.cpp.o
  ../deps/vecmath/include/Matrix2f.h
  ../deps/vecmath/include/Matrix3f.h
@@ -51,7 +51,7 @@ CMakeFiles/PA3.dir/src/main.cpp.o
  ../include/renderer.hpp
  ../include/scene_parser.hpp
  ../include/utilities.hpp
- /home/yikai/Documents/ComputerGraphicsProject/src/main.cpp
+ /home/yikai/Documents/computer-graphics-project-2021-spring/src/main.cpp
  /usr/include/GL/freeglut_std.h
  /usr/include/GL/glut.h
 CMakeFiles/PA3.dir/src/mesh.cpp.o
@@ -71,7 +71,7 @@ CMakeFiles/PA3.dir/src/mesh.cpp.o
  ../include/ray.hpp
  ../include/triangle.hpp
  ../include/utilities.hpp
- /home/yikai/Documents/ComputerGraphicsProject/src/mesh.cpp
+ /home/yikai/Documents/computer-graphics-project-2021-spring/src/mesh.cpp
  /usr/include/GL/freeglut_std.h
  /usr/include/GL/glut.h
 CMakeFiles/PA3.dir/src/scene_parser.cpp.o
@@ -102,6 +102,6 @@ CMakeFiles/PA3.dir/src/scene_parser.cpp.o
  ../include/transform.hpp
  ../include/triangle.hpp
  ../include/utilities.hpp
- /home/yikai/Documents/ComputerGraphicsProject/src/scene_parser.cpp
+ /home/yikai/Documents/computer-graphics-project-2021-spring/src/scene_parser.cpp
  /usr/include/GL/freeglut_std.h
  /usr/include/GL/glut.h

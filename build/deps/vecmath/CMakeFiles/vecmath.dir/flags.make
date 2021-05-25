@@ -6,5 +6,5 @@ CXX_FLAGS = -O3 -DNDEBUG   -std=gnu++11
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/yikai/Documents/ComputerGraphicsProject/deps/vecmath/include 
+CXX_INCLUDES = -I/home/yikai/Documents/computer-graphics-project-2021-spring/deps/vecmath/include 
 

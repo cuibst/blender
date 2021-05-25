@@ -5,6 +5,7 @@
 #include "curve.hpp"
 #include "bounding_box.hpp"
 #include "sphere.hpp"
+#include "mesh.hpp"
 #include <tuple>
 #include <math.h>
 
@@ -38,9 +39,9 @@ public:
         delete pCurve;
     }
 
-    bool tryIntersect(const Ray &r, Hit &h, float tmin, double tbegin, const Hit &boundingBoxIntersect)
+    bool tryIntersect(const Ray &r, Hit &h, float tmin, double Tbegin, double tbegin, double fbegin)
     {
-        Vector3f x = Vector3f(boundingBoxIntersect.getT(), tbegin, atan2(-r.pointAtParameter(boundingBoxIntersect.getT()).z(), -r.pointAtParameter(boundingBoxIntersect.getT()).x()));
+        Vector3f x = Vector3f(Tbegin, tbegin, fbegin);
         CurvePoint p;
         Vector3f dSdt, dSdf, F;
         Matrix3f dF;
@@ -69,16 +70,19 @@ public:
             return false;
         dSdt = Vector3f(cos(x.z()) * p.T.x(), p.T.y(), sin(x.z()) * p.T.x());
         dSdf = Vector3f(-sin(x.z()) * p.V.x(), 0, cos(x.z()) * p.V.x());
-        h.set(x.x(), this->material, -Vector3f::cross(dSdt, dSdf));
+        Vector3f norm = -Vector3f::cross(dSdt, dSdf);
+        norm.normalize();
+        if(Vector3f::dot(norm, r.getDirection()) >= 0)
+            norm.negate();
+        h.set(x.x(), 0, 0, this->material, norm, r);
         return true;
     }
 
     bool intersect(const Ray &r, Hit &h, float tmin) override {
         // (PA3 optional TODO): implement this for the ray-tracing routine using G-N iteration.
-        Hit boundingBoxIntersect;
-        if(!box->intersect(r, boundingBoxIntersect, tmin))
+        float intermin, intermax;
+        if(!box->intersect(r, intermin, intermax, tmin))
             return false;
-        boundingBoxIntersect = Hit();
         double step = (dRegion.second - dRegion.first) / 10.0;
         BoundingBox tmp(0,0,0,0,0,0);
         bool flag = false;
@@ -92,10 +96,20 @@ public:
             ylow = min(L.V.y(), R.V.y()), yhigh = max(L.V.y(), R.V.y());
             
             tmp = BoundingBox(-xmax, xmax, ylow - 0.05, yhigh + 0.05, -xmax, xmax);
-            if(tmp.intersect(r, boundingBoxIntersect, tmin) && boundingBoxIntersect.getT() < h.getT())
+            if(tmp.intersect(r, intermin, intermax, tmin))
             {
-                flag = tryIntersect(r, h, tmin, lt, boundingBoxIntersect) || flag;
-                flag = tryIntersect(r, h, tmin, (lt + rt) / 2, boundingBoxIntersect) || flag;
+                if(intermin > tmin)
+                {
+                    float phi = atan2(-r.pointAtParameter(intermin).z(), -r.pointAtParameter(intermin).x());
+                    flag = tryIntersect(r, h, tmin, intermin, lt, phi) || flag;
+                    flag = tryIntersect(r, h, tmin, intermin, (lt + rt) / 2, phi) || flag;
+                }
+                if(intermax < 1e30)
+                {
+                    float phi = atan2(-r.pointAtParameter(intermax).z(), -r.pointAtParameter(intermax).x());
+                    flag = tryIntersect(r, h, tmin, intermax, lt, phi) || flag;
+                    flag = tryIntersect(r, h, tmin, intermax, (lt + rt) / 2, phi) || flag;
+                }
             }
         }
         if(!flag)
