@@ -13,6 +13,7 @@ using namespace std;
 // TODO (PA2): Copy from PA1
 class Triangle: public Object3D
 {
+	BoundingBox box;
 
 public:
 	Triangle() = delete;
@@ -23,6 +24,9 @@ public:
 		vertices[1] = b;
 		vertices[2] = c;
 		normal = Vector3f::cross(b-a, c-a).normalized();
+		Vector3f min_point(fmin(vertices[0].x(), fmin(vertices[1].x(), vertices[2].x())), fmin(vertices[0].y(), fmin(vertices[1].y(), vertices[2].y())), fmin(vertices[0].z(), fmin(vertices[1].z(), vertices[2].z())));
+		Vector3f max_point(fmax(vertices[0].x(), fmax(vertices[1].x(), vertices[2].x())), fmax(vertices[0].y(), fmax(vertices[1].y(), vertices[2].y())), fmax(vertices[0].z(), fmax(vertices[1].z(), vertices[2].z())));
+		box = BoundingBox(min_point - 0.01f, max_point + 0.01f);
 	}
 
 	bool intersect( const Ray& ray,  Hit& hit , float tmin) override {
@@ -51,6 +55,12 @@ public:
         glVertex3fv(vertices[0]); glVertex3fv(vertices[1]); glVertex3fv(vertices[2]);
         glEnd();
     }
+
+	bool getBoundingBox(BoundingBox &box) override
+	{
+		box = this->box;
+		return true;
+	}
 
 protected:
 };

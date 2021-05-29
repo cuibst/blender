@@ -66,11 +66,11 @@ public:
         return normal;
     }
 
-    void set(float _t, Material *m, const Vector3f &n) {
-        t = _t;
-        material = m;
-        normal = n;
-    }
+    // void set(float _t, Material *m, const Vector3f &n) {
+    //     t = _t;
+    //     material = m;
+    //     normal = n;
+    // }
 
     void set(float _t, float _u, float _v, Material *m, const Vector3f &n, const Ray &r) {
         t = _t;
@@ -79,7 +79,19 @@ public:
         material = m;
         isFrontFace = Vector3f::dot(r.getDirection(), n) <= 0.0;
         normal = isFrontFace ? n : -n;
+        point = r.pointAtParameter(_t);
     }
+
+    void setT(float _t)
+    {
+        t = _t;
+    }
+
+    Vector3f lightFlux, photonFlux, attenuation;
+    Vector3f point;
+
+    float radius;
+    int photonCount;
 
 private:
     float t;
@@ -88,10 +100,6 @@ private:
 
     float u, v;
     
-    Vector3f lightFlux, photonFlux, attenuation;
-    float radius;
-    int photonCount;
-
     bool isFrontFace;
 
 };

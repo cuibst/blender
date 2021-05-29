@@ -59,6 +59,27 @@ public:
         glPopMatrix();
     }
 
+    Ray generateRandomRay() override {
+        Vector3f ret;
+        do
+        {
+            ret = 2 * Vector3f(drand48(), drand48(), drand48()) - Vector3f(1,1,1);
+        }while(ret.squaredLength() >= 1);
+        ret.normalize();
+        Vector3f dir = ret;
+        do
+        {
+            ret = 2 * Vector3f(drand48(), drand48(), drand48()) - Vector3f(1,1,1);
+        }while(ret.squaredLength() >= 1);
+        return Ray(center + radius * dir, (ret + dir).normalized());
+    }
+
+    bool getBoundingBox(BoundingBox &box)
+    {
+        box = BoundingBox(center - radius * Vector3f(1,1,1), center + radius * Vector3f(1,1,1));
+        return true;
+    }
+
 protected:
     Vector3f center;
     float radius;

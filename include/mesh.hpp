@@ -6,6 +6,7 @@
 #include "triangle.hpp"
 #include "Vector2f.h"
 #include "Vector3f.h"
+#include "bvh.hpp"
 
 
 class Mesh : public Object3D {
@@ -36,10 +37,19 @@ public:
         }
     }
 
+    bool getBoundingBox(BoundingBox &box) override
+    {
+        box = this->box;
+        return true;
+    }
+
 private:
 
     // Normal can be used for light estimation
     void computeNormal();
+    bvhNode *root;
+    std::vector<Object3D*> triangleList;
+    BoundingBox box;
 };
 
 #endif

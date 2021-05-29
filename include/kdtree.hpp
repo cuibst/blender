@@ -1,111 +1,99 @@
 #pragma once
 
-/**
- * This file has not been put into use!!
- */
+#include "hit.hpp"
+#include "utilities.hpp"
 
-#include "object3d.hpp"
-
+#include <vector>
 #include <algorithm>
 
-class Node : public Object3D {
-
-    Object3D *lch, *rch;
-    BoundingBox box;
-    Object3D *obj;
-    int axis;
+class Node {
+    Hit *hit;
+    float maxRadius;
+    Vector3f minVertex,maxVertex;
 
 public:
+    Node *lch, *rch;
+
     Node()
     {
         lch = rch = nullptr;
+        hit = nullptr;
+        maxRadius = 0;
+        minVertex = Vector3f(1e38);
+        maxVertex = Vector3f(-1e38);
     }
 
-    Node(std::vector<Object3D*> &objects, int l, int r, int depth)
+    Node(std::vector<Hit*> &hitList, int l, int r, int depth)
     {
-        axis = depth % 3;
-        lch = rch = nullptr;
+        int axis = depth % 3;
+        minVertex = Vector3f(1e38);
+        maxVertex = Vector3f(-1e38);
 
+        lch = rch = nullptr;
+        maxRadius = 0;
+        for(int i=l;i<=r;i++)
+        {
+            minVertex = min(minVertex, hitList[i]->point);
+            maxVertex = max(maxVertex, hitList[i]->point);
+            maxRadius = max(maxRadius, hitList[i]->radius);
+        }
         if(l == r)
         {
-            objects[l]->getBoundingBox(box);
-            obj = objects[l];
+            hit = hitList[l];
             return;
         }
 
-        if(l + 1 == r)
-        {
-            lch = objects[l + 1];
-            obj = objects[l];
-            objects[l]->getBoundingBox(box);
-        }
-        else if(l + 2 == r)
-        {
-            lch = objects[l + 1];
-            rch = objects[l + 2];
-            obj = objects[l];
-            objects[l]->getBoundingBox(box);
-        }
-        else
-        {
-            std::vector<Object3D*> tmp = objects;
-            int mid = (l + r) >> 1;
-            if(axis == 0)
-                std::sort(tmp.begin() + l, tmp.begin() + r + 1, cmpX);
-            if(axis == 1)
-                std::sort(tmp.begin() + l, tmp.begin() + r + 1, cmpY);
-            if(axis == 2)
-                std::sort(tmp.begin() + l, tmp.begin() + r + 1, cmpZ);
-            obj = tmp[mid];
-            tmp[mid]->getBoundingBox(box);
-            if(l < mid)
-                lch = new Node(tmp, l, mid - 1, depth + 1);
-            if(r > mid)
-                rch = new Node(tmp, mid + 1, r, depth + 1);
-        }
-        BoundingBox tmp;
-        if(lch && lch->getBoundingBox(tmp))
-            box = mergeBox(box, tmp);
-        if(rch && rch->getBoundingBox(tmp))
-            box = mergeBox(box, tmp);
+        int mid = (l + r) >> 1;
+        if(axis == 0)
+            std::nth_element(hitList.begin() + l, hitList.begin() + mid, hitList.begin() + r + 1, [](Hit *x, Hit *y){
+                return x->point.x() < y->point.x();
+            });
+        else if(axis == 1)
+            std::nth_element(hitList.begin() + l, hitList.begin() + mid, hitList.begin() + r + 1, [](Hit *x, Hit *y){
+                return x->point.y() < y->point.y();
+            });
+        else if(axis == 2)
+            std::nth_element(hitList.begin() + l, hitList.begin() + mid, hitList.begin() + r + 1, [](Hit *x, Hit *y){
+                return x->point.z() < y->point.z();
+            });
+        hit = hitList[mid];
+        if(l < mid)
+            lch = new Node(hitList, l, mid-1, depth+1);
+        if(r > mid)
+            rch = new Node(hitList, mid+1, r, depth+1);
     }
 
-    bool intersect(const Ray &r, Hit &h, float tmin) override
+    void update(const Vector3f &photon, const Vector3f &attenuation, bool front)
     {
-        Hit tmpHit;
-        if(!box.intersect(r, tmpHit, tmin))
-            return false;
-        bool sh = obj->intersect(r, h, tmin), lh = lch ? lch->intersect(r, h, tmin) : false, rh = rch ? rch->intersect(r, h, tmin) : false;
-        return sh || (lh || rh);
+        if(getRadius(photon) > maxRadius)
+            return;
+        if((hit->point - photon).squaredLength() <= hit->radius && hit->IsFrontFace() == front)
+        {
+            float disc = (hit->photonCount * DISCOUNT_COEFFICIENT + DISCOUNT_COEFFICIENT) / (hit->photonCount * DISCOUNT_COEFFICIENT + 1.0f);
+            hit->photonCount ++;
+            hit->radius *= sqrt(disc);
+            hit->photonFlux = (hit->photonFlux + hit->attenuation * attenuation) * disc;
+        }
+        if(lch)
+            lch->update(photon, attenuation, front);
+        if(rch)
+            rch->update(photon, attenuation, front);
+        maxRadius = hit->radius;
+        if(lch)
+            maxRadius = max(lch->maxRadius, maxRadius);
+        if(rch)
+            maxRadius = max(rch->maxRadius, maxRadius);
     }
 
-    bool getBoundingBox(BoundingBox &b) override
-    {
-        b = box;
-        return true;
+    float getRadius(const Vector3f& photon) {
+        float ret = 0;
+        if (photon.x() > maxVertex.x()) ret += powf(photon.x() - maxVertex.x(), 2);
+        if (photon.x() < minVertex.x()) ret += powf(minVertex.x() - photon.x(), 2);
+        if (photon.y() > maxVertex.y()) ret += powf(photon.y() - maxVertex.y(), 2);
+        if (photon.y() < minVertex.y()) ret += powf(minVertex.y() - photon.y(), 2);
+        if (photon.z() > maxVertex.z()) ret += powf(photon.z() - maxVertex.z(), 2);
+        if (photon.z() < minVertex.z()) ret += powf(minVertex.z() - photon.z(), 2);
+        return ret;
     }
 
-    static bool cmpX(Object3D *a, Object3D *b)
-    {
-        BoundingBox aa, bb;
-        if(!a->getBoundingBox(aa)||!b->getBoundingBox(bb))
-            return false;
-        return aa.minPoint().x() < bb.minPoint().x();
-    }
-    
-    static bool cmpY(Object3D *a, Object3D *b)
-    {
-        BoundingBox aa, bb;
-        if(!a->getBoundingBox(aa)||!b->getBoundingBox(bb))
-            return false;
-        return aa.minPoint().y() < bb.minPoint().y();
-    }
-    
-    static bool cmpZ(Object3D *a, Object3D *b)
-    {
-        BoundingBox aa, bb;
-        if(!a->getBoundingBox(aa)||!b->getBoundingBox(bb))
-            return false;
-        return aa.minPoint().z() < bb.minPoint().z();
-    }
 };

@@ -35,6 +35,23 @@ public:
         return n * Vector3f(0, 0, 1);
     }
 
+    Ray generateRandomRay() override {
+        float u = drand48(), v = drand48();
+        u = x0 + (x1 - x0) * u;
+        v = y0 + (y1 - y0) * v;
+
+        Vector3f ret2;
+        do {
+            ret2 = 2.0 * Vector3f(drand48(), drand48(), drand48()) - Vector3f(1,1,1);
+        }   while(ret2.squaredLength() >= 1.0);
+        return Ray(Vector3f(u, v, d), (ret2 + n*Vector3f(0, 0, 1)).normalized());
+    }
+
+    bool getBoundingBox(BoundingBox &box) override {
+        box = BoundingBox(Vector3f(x0,y0, d - 0.0001), Vector3f(x1, y1, d + 0.0001));
+        return true;
+    }
+
 private:
     float x0, y0, x1, y1, d, n;
 };
@@ -72,6 +89,23 @@ public:
         return n * Vector3f(0, 1, 0);
     }
 
+    Ray generateRandomRay() override {
+        float u = drand48(), v = drand48();
+        u = x0 + (x1 - x0) * u;
+        v = z0 + (z1 - z0) * v;
+
+        Vector3f ret2;
+        do {
+            ret2 = 2.0 * Vector3f(drand48(), drand48(), drand48()) - Vector3f(1,1,1);
+        }   while(ret2.squaredLength() >= 1.0);
+        return Ray(Vector3f(u, d, v), (ret2 + n*Vector3f(0, 1, 0)).normalized());
+    }
+
+    bool getBoundingBox(BoundingBox &box) override {
+        box = BoundingBox(Vector3f(x0, d - 0.0001, z0), Vector3f(x1, d + 0.0001, z1));
+        return true;
+    }
+
 private:
     float x0, z0, x1, z1, d, n;
 };
@@ -107,6 +141,25 @@ public:
     Vector3f getNorm(float u, float v)
     {
         return n * Vector3f(1, 0, 0);
+    }
+
+    Ray generateRandomRay() override {
+        float u = drand48(), v = drand48();
+        
+        u = z0 + (z1 - z0) * u;
+        v = y0 + (y1 - y0) * v;
+
+        Vector3f ret2;
+        do {
+            ret2 = 2.0 * Vector3f(drand48(), drand48(), drand48()) - Vector3f(1,1,1);
+        }   while(ret2.squaredLength() >= 1.0);
+
+        return Ray(Vector3f(u, v, d), (ret2 + n*Vector3f(1, 0, 0)).normalized());
+    }
+
+    bool getBoundingBox(BoundingBox &box) override {
+        box = BoundingBox(Vector3f(d - 0.0001, y0, z0), Vector3f(d + 0.0001, y1, z1));
+        return true;
     }
 
 private:

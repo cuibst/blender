@@ -9,15 +9,16 @@
 bool Mesh::intersect(const Ray &r, Hit &h, float tmin) {
 
     // Optional: Change this brute force method into a faster one.
-    bool result = false;
-    for (int triId = 0; triId < (int) t.size(); ++triId) {
-        TriangleIndex& triIndex = t[triId];
-        Triangle triangle(v[triIndex[0]],
-                          v[triIndex[1]], v[triIndex[2]], material);
-        triangle.normal = n[triId];
-        result |= triangle.intersect(r, h, tmin);
-    }
-    return result;
+    // bool result = false;
+    // for (int triId = 0; triId < (int) t.size(); ++triId) {
+    //     TriangleIndex& triIndex = t[triId];
+    //     Triangle triangle(v[triIndex[0]],
+    //                       v[triIndex[1]], v[triIndex[2]], material);
+    //     triangle.normal = n[triId];
+    //     result |= triangle.intersect(r, h, tmin);
+    // }
+    // return result;
+    return root->intersect(r, h, tmin);
 }
 
 Mesh::Mesh(const char *filename, Material *material) : Object3D(material) {
@@ -81,6 +82,18 @@ Mesh::Mesh(const char *filename, Material *material) : Object3D(material) {
     computeNormal();
 
     f.close();
+    BoundingBox tmp;
+    for(int _=0;_<t.size();_++)
+    {
+        TriangleIndex& triIndex = t[_];
+        triangleList.push_back((Object3D*)new Triangle(v[triIndex[0]], v[triIndex[1]], v[triIndex[2]], material));
+        triangleList.back()->getBoundingBox(tmp);
+        if(_ == 0)
+            box = tmp;
+        else
+            box = BoundingBox::mergeBox(box, tmp);
+    }
+    root = new bvhNode(triangleList, 0, triangleList.size() - 1);
 }
 
 void Mesh::computeNormal() {

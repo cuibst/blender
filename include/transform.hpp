@@ -31,7 +31,7 @@ public:
         Ray tr(trSource, trDirection);
         bool inter = o->intersect(tr, h, tmin);
         if (inter) {
-            h.set(h.getT(), h.getMaterial(), transformDirection(transform.transposed(), h.getNormal()).normalized());
+            h.set(h.getT(), h.getU(), h.getV(), h.getMaterial(), transformDirection(transform.transposed(), h.getNormal()).normalized(), r);
         }
         return inter;
     }
@@ -42,6 +42,22 @@ public:
         glMultMatrixf(transform.inverse());
         o->drawGL();
         glPopMatrix();
+    }
+
+    bool getBoundingBox(BoundingBox &box) override
+    {
+        BoundingBox bb;
+        if(!o->getBoundingBox(bb))
+            return false;
+        Vector3f a = transformPoint(transform, Vector3f(box.x[0], box.y[0], box.z[0]));
+        Vector3f b = transformPoint(transform, Vector3f(box.x[1], box.y[1], box.z[1]));
+        box = BoundingBox(a, b);
+        return true;
+    }
+
+    Material* getMaterial() const override
+    {
+        return o->getMaterial();
     }
 
 protected:

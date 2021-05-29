@@ -57,8 +57,12 @@ vecio.h
 ../deps/vecmath/include/vecio.h
 
 ../include/bounding_box.hpp
-plane.hpp
-../include/plane.hpp
+
+../include/bvh.hpp
+object3d.hpp
+../include/object3d.hpp
+algorithm
+-
 
 ../include/camera.hpp
 ray.hpp
@@ -97,6 +101,8 @@ algorithm
 ../include/group.hpp
 object3d.hpp
 ../include/object3d.hpp
+bvh.hpp
+../include/bvh.hpp
 ray.hpp
 ../include/ray.hpp
 hit.hpp
@@ -116,6 +122,16 @@ ray.hpp
 cassert
 -
 vecmath.h
+-
+
+../include/kdtree.hpp
+hit.hpp
+../include/hit.hpp
+utilities.hpp
+../include/utilities.hpp
+vector
+-
+algorithm
 -
 
 ../include/light.hpp
@@ -151,6 +167,8 @@ Vector2f.h
 ../include/Vector2f.h
 Vector3f.h
 ../include/Vector3f.h
+bvh.hpp
+../include/bvh.hpp
 
 ../include/object3d.hpp
 ray.hpp
@@ -159,6 +177,8 @@ hit.hpp
 ../include/hit.hpp
 material.hpp
 ../include/material.hpp
+bounding_box.hpp
+../include/bounding_box.hpp
 glut.h
 -
 
@@ -199,6 +219,8 @@ group.hpp
 ../include/group.hpp
 light.hpp
 ../include/light.hpp
+kdtree.hpp
+../include/kdtree.hpp
 omp.h
 -
 

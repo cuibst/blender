@@ -45,14 +45,14 @@ public:
         CurvePoint p;
         Vector3f dSdt, dSdf, F;
         Matrix3f dF;
-        for(int _=0;_<=20;_++)
+        for(int _=0;_<=30;_++)
         {
             p = pCurve->pointAtT(x.y());
             dSdt = Vector3f(cos(x.z()) * p.T.x(), p.T.y(), sin(x.z()) * p.T.x());
             dSdf = Vector3f(-sin(x.z()) * p.V.x(), 0, cos(x.z()) * p.V.x());
             dF = Matrix3f(r.getDirection(), -dSdt, -dSdf);
             F = r.pointAtParameter(x.x()) - Vector3f(cos(x.z()) * p.V.x(), p.V.y(), sin(x.z()) * p.V.x());
-            if(fabs(dF.determinant()) < eps || F.length() < 1e-3)
+            if(fabs(dF.determinant()) < eps || F.length() < 1e-4)
                 break;
             x = x - dF.inverse() * F;
             x.z() = fmod(x.z(), 2 * PI);
@@ -61,12 +61,12 @@ public:
             // while(x.z() > PI)
             //     x.z() -= 2 * PI;
         }
-        if(F.length() > 1e-3)
+        if(F.length() > 1e-4)
             return false;
         p = pCurve->pointAtT(x.y());
         F = r.pointAtParameter(x.x()) - Vector3f(cos(x.z()) * p.V.x(), p.V.y(), sin(x.z()) * p.V.x());
         
-        if(F.length() > 1e-3 || x.y() < dRegion.first || x.y() > dRegion.second || x.x() < tmin || x.x() > h.getT())
+        if(F.length() > 1e-4 || x.y() < dRegion.first || x.y() > dRegion.second || x.x() < tmin || x.x() > h.getT())
             return false;
         dSdt = Vector3f(cos(x.z()) * p.T.x(), p.T.y(), sin(x.z()) * p.T.x());
         dSdf = Vector3f(-sin(x.z()) * p.V.x(), 0, cos(x.z()) * p.V.x());
@@ -89,26 +89,34 @@ public:
         double lt,rt;
         CurvePoint L,R;
         float ylow,yhigh;
+        bool inside = (fabs(r.getOrigin().x()) < xmax && fabs(r.getOrigin().z()) < xmax && r.getOrigin().y() > ymin && r.getOrigin().y() < ymax);
+        Ray rp = r;
+        if(inside)
+        {
+            tmin += 0.48;
+            rp = Ray(r.pointAtParameter(0.1), r.getDirection());
+        }
         for(int i=0;i<10;i++)
         {
             lt = dRegion.first + step * i, rt = dRegion.first + step * (i + 1);
             L = pCurve->pointAtT(lt), R = pCurve->pointAtT(rt);
             ylow = min(L.V.y(), R.V.y()), yhigh = max(L.V.y(), R.V.y());
             
-            tmp = BoundingBox(-xmax, xmax, ylow - 0.05, yhigh + 0.05, -xmax, xmax);
-            if(tmp.intersect(r, intermin, intermax, tmin))
+            tmp = BoundingBox(-xmax, xmax, ylow, yhigh, -xmax, xmax);
+            bool tmpflag = tmp.intersect(rp, intermin, intermax, tmin);
+            if(tmpflag && (inside || intermin < h.getT()))
             {
                 if(intermin > tmin)
                 {
-                    float phi = atan2(-r.pointAtParameter(intermin).z(), -r.pointAtParameter(intermin).x());
-                    flag = tryIntersect(r, h, tmin, intermin, lt, phi) || flag;
-                    flag = tryIntersect(r, h, tmin, intermin, (lt + rt) / 2, phi) || flag;
+                    float phi = atan2(-rp.pointAtParameter(intermin).z(), -rp.pointAtParameter(intermin).x());
+                    flag = tryIntersect(rp, h, tmin, intermin, lt, phi) || flag;
+                    flag = tryIntersect(rp, h, tmin, intermin, (lt + rt) / 2, phi) || flag;
                 }
                 if(intermax < 1e30)
                 {
-                    float phi = atan2(-r.pointAtParameter(intermax).z(), -r.pointAtParameter(intermax).x());
-                    flag = tryIntersect(r, h, tmin, intermax, lt, phi) || flag;
-                    flag = tryIntersect(r, h, tmin, intermax, (lt + rt) / 2, phi) || flag;
+                    float phi = atan2(-rp.pointAtParameter(intermax).z(), -rp.pointAtParameter(intermax).x());
+                    flag = tryIntersect(rp, h, tmin, intermax, lt, phi) || flag;
+                    flag = tryIntersect(rp, h, tmin, intermax, (lt + rt) / 2, phi) || flag;
                 }
             }
         }
@@ -210,6 +218,12 @@ public:
             glVertex3fv(surface.VV[std::get<2>(surface.VF[i])]);
         }
         glEnd();
+    }
+
+    bool getBoundingBox(BoundingBox &box) override
+    {
+        box = (*this->box);
+        return true;
     }
 };
 

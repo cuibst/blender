@@ -3,6 +3,7 @@
 
 
 #include "object3d.hpp"
+#include "bvh.hpp"
 #include "ray.hpp"
 #include "hit.hpp"
 #include <iostream>
@@ -36,6 +37,9 @@ public:
             ret = obj->intersect(r,h,tmin) || ret;
         }
         return ret;
+        // if(root == nullptr)
+        //     BuildTree();
+        // return root->intersect(r, h, tmin);
     }
 
     void addObject(int index, Object3D *obj) {
@@ -51,7 +55,44 @@ public:
             objects[i]->drawGL();
     }
 
+    std::vector<Object3D*> getLightSources() const {
+        std::vector<Object3D*> ret;
+        for(auto obj : objects)
+            if(obj->getMaterial() != nullptr && obj->getMaterial()->Emission() != Vector3f::ZERO)
+                ret.push_back(obj);
+        for(int i=0;i<objects.size();i++)
+            if(objects[i]->getMaterial() == nullptr)
+                std::cout << i << " material error!" << std::endl;
+        return ret;
+    }
+
+    bool getBoundingBox(BoundingBox &box) override
+    {
+        bool flag = false;
+        BoundingBox ret;
+        for(auto obj : objects)
+        {
+            BoundingBox tmp;
+            if(!obj->getBoundingBox(tmp))
+                return false;
+            if(!flag)
+            {
+                box = tmp;
+                flag = true;
+            }
+            else
+                box = BoundingBox::mergeBox(box, tmp);
+        }
+        return true;
+    }
+
+    void BuildTree()
+    {
+        root = new bvhNode(objects, 0, objects.size() - 1);
+    }
+
 private:
+    bvhNode *root = nullptr;
 
 };
 

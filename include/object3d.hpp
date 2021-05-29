@@ -4,6 +4,7 @@
 #include "ray.hpp"
 #include "hit.hpp"
 #include "material.hpp"
+#include "bounding_box.hpp"
 #include <glut.h>
 
 // Base class for all 3d entities.
@@ -25,6 +26,16 @@ public:
     virtual void drawGL() {
         if (material) material->Use();
     }
+
+    virtual Material* getMaterial() const {
+        return material;
+    }
+
+    virtual Ray generateRandomRay() {
+        return Ray(Vector3f::ZERO, Vector3f::ZERO);
+    }
+
+    virtual bool getBoundingBox(BoundingBox &box) = 0;
 
 protected:
 

@@ -40,10 +40,13 @@ CMakeFiles/PA3.dir/src/main.cpp.o
  ../deps/vecmath/include/Vector4f.h
  ../deps/vecmath/include/vecio.h
  ../deps/vecmath/include/vecmath.h
+ ../include/bounding_box.hpp
+ ../include/bvh.hpp
  ../include/camera.hpp
  ../include/group.hpp
  ../include/hit.hpp
  ../include/image.hpp
+ ../include/kdtree.hpp
  ../include/light.hpp
  ../include/material.hpp
  ../include/object3d.hpp
@@ -64,6 +67,8 @@ CMakeFiles/PA3.dir/src/mesh.cpp.o
  ../deps/vecmath/include/Vector4f.h
  ../deps/vecmath/include/vecio.h
  ../deps/vecmath/include/vecmath.h
+ ../include/bounding_box.hpp
+ ../include/bvh.hpp
  ../include/hit.hpp
  ../include/material.hpp
  ../include/mesh.hpp
@@ -85,6 +90,7 @@ CMakeFiles/PA3.dir/src/scene_parser.cpp.o
  ../deps/vecmath/include/vecio.h
  ../deps/vecmath/include/vecmath.h
  ../include/bounding_box.hpp
+ ../include/bvh.hpp
  ../include/camera.hpp
  ../include/curve.hpp
  ../include/group.hpp

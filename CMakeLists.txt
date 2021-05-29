@@ -49,7 +49,9 @@ SET(PA3_INCLUDES
         include/utilities.hpp
         include/renderer.hpp
         include/bounding_box.hpp
-        include/rectangles.hpp)
+        include/rectangles.hpp
+        include/kdtree.hpp
+        include/bvh.hpp)
 
 SET(CMAKE_CXX_STANDARD 11)
 SET(CMAKE_CXX_FLAGS "-fopenmp -g -O3 -Wno-deprecated-declarations")

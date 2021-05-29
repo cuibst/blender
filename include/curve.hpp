@@ -60,6 +60,8 @@ public:
     }
 
     virtual std::pair<float, float> definitionRegion() = 0;
+
+    bool getBoundingBox(BoundingBox &box) override {return false;}
 };
 
 class BezierCurve : public Curve {

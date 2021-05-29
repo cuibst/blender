@@ -64,6 +64,15 @@ public:
         glEnd();
     }
 
+    bool getBoundingBox(BoundingBox &box) override
+    {
+        Vector3f norm = normal.normalized();
+        Vector3f max_point = float(10000) * Vector3f(norm.x() < 1 - 1e-6, norm.y() < 1 - 1e-6, norm.z() < 1 - 1e-6) + d * norm;
+        Vector3f min_point =  -float(10000) * Vector3f(norm.x() < 1 - 1e-6, norm.y() < 1 - 1e-6, norm.z() < 1 - 1e-6) + d * norm;
+        box = BoundingBox(min_point, max_point);
+        return true;
+    }
+
 protected:
     Vector3f normal;
     float d;

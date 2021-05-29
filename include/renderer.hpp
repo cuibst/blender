@@ -5,6 +5,7 @@
 #include "camera.hpp"
 #include "group.hpp"
 #include "light.hpp"
+#include "kdtree.hpp"
 
 #include <omp.h>
 
@@ -49,7 +50,7 @@ class PathTraceColorizer : public Colorizer
     {
         Group *group = parser.getGroup();
         Hit hit;
-        if(!group->intersect(r, hit, 0))
+        if(!group->intersect(r, hit, 0.0001))
             return parser.getBackgroundColor();
         Vector3f ret = hit.getMaterial()->Emission();
         Ray scatteredRay(r);
@@ -162,6 +163,8 @@ public:
         omp_set_num_threads(10);
         for(int x=0;x<camera->getWidth();x++)
         {
+            if(x % 10 == 0)
+                fprintf(stdout, "rendering row %d\n", x);
             #pragma omp parallel for schedule(dynamic, 1) 
             for(int y=0;y<camera->getHeight();y++)
             {
@@ -175,8 +178,152 @@ public:
                 }
                 img.SetPixel(x, y, color / sampleCnt);
             }
-            fprintf(stdout, "\rend rendering row %d with thread %d", x, omp_get_thread_num());
+            
         }
         img.SaveBMP(outputFile);
+    }
+};
+
+class SPPMRenderer: public Renderer
+{
+    std::vector<Object3D*> lightSources;
+    std::vector<Hit*> visiblePoints;
+
+    Node *root = nullptr;
+
+    int roundCnt, photonCnt;
+
+    void getVisiblePoints(SceneParser &parser, Ray &ray, Hit *hit)
+    {
+        Group *baseGroup = parser.getGroup();
+        if(baseGroup == nullptr)
+            return;
+        int curDepth = 0;
+        Vector3f totalAttenuate(1,1,1);
+        while(curDepth < MAX_TRACE_DEPTH)
+        {
+            curDepth ++;
+            hit->setT(1e38);
+            if(!baseGroup->intersect(ray, *hit, eps))
+            {
+                hit->lightFlux += hit->attenuation * parser.getBackgroundColor();
+                return;
+            }
+
+            Ray scatteredRay(ray);
+            Vector3f attenuate;
+            bool scatterFlag = hit->getMaterial()->Scatter(ray, *hit, attenuate, scatteredRay);
+            if(scatterFlag)
+                totalAttenuate = totalAttenuate * attenuate;
+            if(dynamic_cast<DiffuseLight*>(hit->getMaterial()) || dynamic_cast<DiffuseMaterial*>(hit->getMaterial()))
+            {
+                hit->attenuation = totalAttenuate;
+                hit->lightFlux += totalAttenuate * hit->getMaterial()->Emission();
+                return;
+            }
+            ray = scatteredRay;
+        }
+    }
+
+    void photonTrace(SceneParser &parser, Ray &ray, const Vector3f &radiance)
+    {
+        Group *baseGroup = parser.getGroup();
+        if(baseGroup == nullptr)
+            return;
+        int curDepth = 0;
+        Vector3f totalAttenuate(radiance);
+        totalAttenuate = totalAttenuate * Vector3f(510,510,510);
+        while(curDepth < MAX_TRACE_DEPTH)
+        {
+            curDepth ++;
+            Hit hit;
+            if(!baseGroup->intersect(ray, hit, 1e-6))
+                return;
+            Ray scatteredRay(ray);
+            Vector3f attenuate;
+            bool scatterFlag = hit.getMaterial()->Scatter(ray, hit, attenuate, scatteredRay);
+
+            if(dynamic_cast<DiffuseMaterial*>(hit.getMaterial()))
+                root->update(hit.point, totalAttenuate, hit.IsFrontFace());
+            if(scatterFlag)
+                totalAttenuate = totalAttenuate * attenuate;
+            else
+                return;
+            ray = scatteredRay;
+        }
+    }
+
+    void eraseTree(Node *&node)
+    {
+        if(node == nullptr)
+            return;
+        eraseTree(node->lch);
+        eraseTree(node->rch);
+        delete node;
+        node = nullptr;
+    }
+
+    void buildTree()
+    {
+        if(root != nullptr)
+            eraseTree(root);
+        std::vector<Hit*> hitList(visiblePoints);
+        root = new Node(hitList, 0, hitList.size() - 1, 0);
+    }
+
+public:
+
+    virtual void render(SceneParser &parser, const char *outputFile)
+    {
+        Camera *camera = parser.getCamera();
+        std::cout << "camera" << std::endl;
+        int width = camera->getWidth();
+        int height = camera->getHeight();
+        Group *baseGroup = parser.getGroup();
+        lightSources = baseGroup->getLightSources();
+        for(int i=0;i<width;i++)
+            for(int j=0;j<height;j++)
+                visiblePoints.push_back(new Hit());
+        omp_set_num_threads(10);
+        for(int i=0;i<roundCnt;i++)
+        {
+            fprintf(stdout, "round %d\n", i);
+            for(int x=0;x<width;x++)
+            {
+                #pragma omp parallel for schedule(dynamic, 1) 
+                for(int y=0;y<height;y++)
+                {
+                    float xx = float(x + (RAND() - 0.5));
+                    float yy = float(y + (RAND() - 0.5));
+                    Ray camRay = camera->generateRay(Vector2f(xx, yy));
+                    visiblePoints[x*height+y]->setT(1e38);
+                    getVisiblePoints(parser, camRay, visiblePoints[x*height+y]);
+                }
+            }
+            buildTree();
+            int averagePhotons = photonCnt / lightSources.size();
+            #pragma omp parallel for schedule(dynamic, 1) 
+            for(int x=0;x<averagePhotons;x++)
+                for(int y=0;y<lightSources.size();y++)
+                {
+                    Ray r = lightSources[y]->generateRandomRay();
+                    photonTrace(parser, r, lightSources[y]->getMaterial()->Emission());
+                }
+        }
+        Image img(width, height);
+        for(int u=0;u<width;u++)
+            for(int v=0;v<height;v++)
+            {
+                Hit *hit = visiblePoints[u*height+v];
+                img.SetPixel(u, v, hit->photonFlux / (PI * hit->radius * photonCnt * roundCnt) + hit->lightFlux / roundCnt);
+            }
+        img.SaveBMP(outputFile);
+    }
+
+    SPPMRenderer(int _roundCnt, int _photonCnt)
+    {
+        roundCnt = _roundCnt;
+        photonCnt = _photonCnt;
+        root = nullptr;
     }
 };

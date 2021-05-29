@@ -39,10 +39,13 @@ CMakeFiles/PA3.dir/src/main.cpp.o: ../deps/vecmath/include/Vector3f.h
 CMakeFiles/PA3.dir/src/main.cpp.o: ../deps/vecmath/include/Vector4f.h
 CMakeFiles/PA3.dir/src/main.cpp.o: ../deps/vecmath/include/vecio.h
 CMakeFiles/PA3.dir/src/main.cpp.o: ../deps/vecmath/include/vecmath.h
+CMakeFiles/PA3.dir/src/main.cpp.o: ../include/bounding_box.hpp
+CMakeFiles/PA3.dir/src/main.cpp.o: ../include/bvh.hpp
 CMakeFiles/PA3.dir/src/main.cpp.o: ../include/camera.hpp
 CMakeFiles/PA3.dir/src/main.cpp.o: ../include/group.hpp
 CMakeFiles/PA3.dir/src/main.cpp.o: ../include/hit.hpp
 CMakeFiles/PA3.dir/src/main.cpp.o: ../include/image.hpp
+CMakeFiles/PA3.dir/src/main.cpp.o: ../include/kdtree.hpp
 CMakeFiles/PA3.dir/src/main.cpp.o: ../include/light.hpp
 CMakeFiles/PA3.dir/src/main.cpp.o: ../include/material.hpp
 CMakeFiles/PA3.dir/src/main.cpp.o: ../include/object3d.hpp
@@ -63,6 +66,8 @@ CMakeFiles/PA3.dir/src/mesh.cpp.o: ../deps/vecmath/include/Vector3f.h
 CMakeFiles/PA3.dir/src/mesh.cpp.o: ../deps/vecmath/include/Vector4f.h
 CMakeFiles/PA3.dir/src/mesh.cpp.o: ../deps/vecmath/include/vecio.h
 CMakeFiles/PA3.dir/src/mesh.cpp.o: ../deps/vecmath/include/vecmath.h
+CMakeFiles/PA3.dir/src/mesh.cpp.o: ../include/bounding_box.hpp
+CMakeFiles/PA3.dir/src/mesh.cpp.o: ../include/bvh.hpp
 CMakeFiles/PA3.dir/src/mesh.cpp.o: ../include/hit.hpp
 CMakeFiles/PA3.dir/src/mesh.cpp.o: ../include/material.hpp
 CMakeFiles/PA3.dir/src/mesh.cpp.o: ../include/mesh.hpp
@@ -84,6 +89,7 @@ CMakeFiles/PA3.dir/src/scene_parser.cpp.o: ../deps/vecmath/include/Vector4f.h
 CMakeFiles/PA3.dir/src/scene_parser.cpp.o: ../deps/vecmath/include/vecio.h
 CMakeFiles/PA3.dir/src/scene_parser.cpp.o: ../deps/vecmath/include/vecmath.h
 CMakeFiles/PA3.dir/src/scene_parser.cpp.o: ../include/bounding_box.hpp
+CMakeFiles/PA3.dir/src/scene_parser.cpp.o: ../include/bvh.hpp
 CMakeFiles/PA3.dir/src/scene_parser.cpp.o: ../include/camera.hpp
 CMakeFiles/PA3.dir/src/scene_parser.cpp.o: ../include/curve.hpp
 CMakeFiles/PA3.dir/src/scene_parser.cpp.o: ../include/group.hpp
