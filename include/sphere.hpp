@@ -47,7 +47,7 @@ public:
         Vector3f normal = (r.pointAtParameter(actualT) - center).normalized();
         float u = atan2(-normal.z(), normal.x()) / (2 * PI) + 0.5f;
         float v = acos(-normal.y()) / PI;
-        h.set(actualT, u, v, material, normal, r);
+        h.set(actualT, u, v, material, getActualNormal(u, v, r.pointAtParameter(actualT)), r);
         return true;
     }
 
@@ -78,6 +78,20 @@ public:
     {
         box = BoundingBox(center - radius * Vector3f(1,1,1), center + radius * Vector3f(1,1,1));
         return true;
+    }
+
+    Vector3f getActualNormal(float u, float v, Vector3f hitPoint)
+    {
+        Vector3f normal = (hitPoint - center).normalized();
+        if(!material->hasBump())
+            return normal;
+        float value = 0;
+        Vector2f grad = material->getBump().GradAt(u, v, value);
+        float phi = u * 2 * PI, theta = v * 2 * PI;
+        Vector3f du(-hitPoint.z(), 0, hitPoint.x()), dv(hitPoint.y() * cos(phi), -radius * sin(theta), hitPoint.y() * sin(phi));
+        if(du.squaredLength() < eps)
+            return normal;
+        return Vector3f::cross(du + normal * grad[0] / (2 * PI), dv + normal * grad[1] / PI);
     }
 
 protected:

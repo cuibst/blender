@@ -53,6 +53,7 @@ CMakeFiles/PA3.dir/src/main.cpp.o
  ../include/ray.hpp
  ../include/renderer.hpp
  ../include/scene_parser.hpp
+ ../include/texture.hpp
  ../include/utilities.hpp
  /home/yikai/Documents/computer-graphics-project-2021-spring/src/main.cpp
  /usr/include/GL/freeglut_std.h
@@ -74,6 +75,7 @@ CMakeFiles/PA3.dir/src/mesh.cpp.o
  ../include/mesh.hpp
  ../include/object3d.hpp
  ../include/ray.hpp
+ ../include/texture.hpp
  ../include/triangle.hpp
  ../include/utilities.hpp
  /home/yikai/Documents/computer-graphics-project-2021-spring/src/mesh.cpp
@@ -105,9 +107,23 @@ CMakeFiles/PA3.dir/src/scene_parser.cpp.o
  ../include/revsurface.hpp
  ../include/scene_parser.hpp
  ../include/sphere.hpp
+ ../include/texture.hpp
  ../include/transform.hpp
  ../include/triangle.hpp
  ../include/utilities.hpp
  /home/yikai/Documents/computer-graphics-project-2021-spring/src/scene_parser.cpp
  /usr/include/GL/freeglut_std.h
  /usr/include/GL/glut.h
+CMakeFiles/PA3.dir/src/texture.cpp.o
+ ../deps/vecmath/include/Matrix2f.h
+ ../deps/vecmath/include/Matrix3f.h
+ ../deps/vecmath/include/Matrix4f.h
+ ../deps/vecmath/include/Quat4f.h
+ ../deps/vecmath/include/Vector2f.h
+ ../deps/vecmath/include/Vector3f.h
+ ../deps/vecmath/include/Vector4f.h
+ ../deps/vecmath/include/vecio.h
+ ../deps/vecmath/include/vecmath.h
+ ../include/stb_image.h
+ ../include/texture.hpp
+ /home/yikai/Documents/computer-graphics-project-2021-spring/src/texture.cpp

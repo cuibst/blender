@@ -30,15 +30,19 @@ cd ..
 # bin/PA3 testcases/RayCast/scene06_bunny_1k.txt output/scene06-bvh.bmp --raycast
 # bin/PA3 testcases/RayCast/scene07_shine.txt output/scene07.bmp --raycast
 # bin/PA3 testcases/RayCast/scene08_core.txt output/scene08.bmp --raycast
-# bin/PA3 testcases/RayCast/scene09_norm.txt output/scene09.bmp --raycast
+bin/PA3 testcases/RayCast/scene09_norm.txt output/scene09.bmp --raycast
 # bin/PA3 testcases/RayCast/scene10_wineglass.txt output/scene10.bmp --raycast
 
 # Path trace testcases.
 # bin/PA3 testcases/PathTrace/scene11_basic.txt output/scene11-pt.bmp --pathtrace
 # bin/PA3 testcases/PathTrace/scene12_wineglass.txt output/scene12-pt.bmp --pathtrace
-# bin/PA3 testcases/SPPM/scene13_green_rabbit.txt output/scene13-pt.bmp --pathtrace
+# bin/PA3 testcases/PathTrace/scene13_green_rabbit.txt output/scene13-pt.bmp --pathtrace
+# bin/PA3 testcases/PathTrace/scene14_texture.txt output/scene14-pt.bmp --pathtrace
+bin/PA3 testcases/PathTrace/scene15_vase.txt output/scene15-pt.bmp --pathtrace
 
 # SPPM testcases.
-bin/PA3 testcases/PathTrace/scene11_basic.txt output/scene11-sppm.bmp --sppm
-bin/PA3 testcases/PathTrace/scene12_wineglass.txt output/scene12-sppm.bmp --sppm
-bin/PA3 testcases/PathTrace/scene13_green_rabbit.txt output/scene13-sppm.bmp --sppm
+# bin/PA3 testcases/PathTrace/scene11_basic.txt output/scene11-sppm.bmp --sppm
+# bin/PA3 testcases/PathTrace/scene12_wineglass.txt output/scene12-sppm.bmp --sppm
+# bin/PA3 testcases/PathTrace/scene13_green_rabbit.txt output/scene13-sppm.bmp --sppm
+# bin/PA3 testcases/PathTrace/scene14_texture.txt output/scene14-sppm.bmp --sppm
+bin/PA3 testcases/PathTrace/scene15_vase.txt output/scene15-sppm.bmp --sppm

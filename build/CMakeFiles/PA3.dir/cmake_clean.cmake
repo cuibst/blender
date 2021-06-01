@@ -6,6 +6,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/PA3.dir/src/main.cpp.o"
   "CMakeFiles/PA3.dir/src/mesh.cpp.o"
   "CMakeFiles/PA3.dir/src/scene_parser.cpp.o"
+  "CMakeFiles/PA3.dir/src/texture.cpp.o"
 )
 
 # Per-language clean rules from dependency scanning.

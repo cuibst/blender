@@ -72,19 +72,24 @@ public:
             printf("Number of control points of BezierCurve must be 3n+1!\n");
             exit(0);
         }
+        int n = controls.size() - 1;
+        for(int _=0;_<NUM_THREADS;_++)
+        {
+            for(int i=0;i<=n;i++)
+                b[_][i].resize(n+1);
+            bp[_].resize(n+1);
+        }
     }
+
+    std::vector<float> b[NUM_THREADS][20];
+    std::vector<float> bp[NUM_THREADS];
 
     CurvePoint pointAtT(float t) override{
         int n = controls.size() - 1;
-        std::vector<float> b[n+1];
+        int _ = omp_get_thread_num();
         for(int i=0;i<=n;i++)
-        {
-            b[i].resize(n+1);
             for(int j=0;j<=n;j++)
-                b[i][j] = 0;
-        }
-        std::vector<float> bp;
-        bp.resize(n+1);
+                b[_][i][j] = 0;
         // float **b = new float*[n + 1];
         // for(int i=0;i<=n;i++)
         // {
@@ -93,24 +98,24 @@ public:
         //         b[i][j] = 0;
         // }
         // float *bp = new float[n+1];
-        b[0][0] = 1;
+        b[_][0][0] = 1;
         for(int i=1;i<=n;i++)
         {
-            b[i][0] = b[i-1][0] * (1 - t);
+            b[_][i][0] = b[_][i-1][0] * (1 - t);
             for(int j=1;j<=n;j++)
-                b[i][j] = b[i-1][j] * (1 - t) + b[i-1][j-1] * t;
+                b[_][i][j] = b[_][i-1][j] * (1 - t) + b[_][i-1][j-1] * t;
         }
-        bp[0] = n * (-b[n-1][0]);
+        bp[_][0] = n * (-b[_][n-1][0]);
         for(int i=1;i<=n;i++)
-            bp[i] = n * (b[n-1][i-1] - b[n-1][i]);
+            bp[_][i] = n * (b[_][n-1][i-1] - b[_][n-1][i]);
         CurvePoint ret;
         ret.T = Vector3f(0,0,0);
         ret.V = Vector3f(0,0,0);
         ret.t = t;
         for(int i=0;i<=n;i++)
         {
-            ret.T += bp[i] * controls[i];
-            ret.V += b[n][i] * controls[i];
+            ret.T += bp[_][i] * controls[i];
+            ret.V += b[_][n][i] * controls[i];
         }
         // delete[] bp;
         // for(int i=0;i<=n;i++)
@@ -148,7 +153,7 @@ class BsplineCurve : public Curve {
     const static int k = 3;
     std::vector<float> t;
 
-    std::vector<float> b[10][4], bp[10];
+    std::vector<float> b[NUM_THREADS][4], bp[NUM_THREADS];
 
 public:
     BsplineCurve(const std::vector<Vector3f> &points) : Curve(points) {
@@ -159,7 +164,7 @@ public:
         t.resize(controls.size() + k + 1);
         for(int i=0;i<=controls.size()+k;i++)
             t[i] = 1.0 * i / (controls.size() + k);
-        for(int _=0;_<10;_++)
+        for(int _=0;_<NUM_THREADS;_++)
         {
             for(int i=0;i<4;i++)
                 b[_][i].resize(controls.size() + k + 1);

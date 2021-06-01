@@ -6,8 +6,8 @@ PerspectiveCamera {
     angle 30
     width 200
     height 200
-    focalLength 5
-    aperture 1
+    focalLength 1
+    aperture 0
 }
 
 Lights {

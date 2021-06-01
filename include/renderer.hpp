@@ -8,6 +8,7 @@
 #include "kdtree.hpp"
 
 #include <omp.h>
+#include <sstream>
 
 using namespace std;
 
@@ -160,11 +161,10 @@ public:
     {
         Camera *camera = parser.getCamera();
         Image img(camera->getWidth(), camera->getHeight());
-        omp_set_num_threads(10);
+        omp_set_num_threads(NUM_THREADS);
         for(int x=0;x<camera->getWidth();x++)
         {
-            if(x % 10 == 0)
-                fprintf(stdout, "rendering row %d\n", x);
+            fprintf(stdout, "rendering column %d\n", x);
             #pragma omp parallel for schedule(dynamic, 1) 
             for(int y=0;y<camera->getHeight();y++)
             {
@@ -219,6 +219,11 @@ class SPPMRenderer: public Renderer
             {
                 hit->attenuation = totalAttenuate;
                 hit->lightFlux += totalAttenuate * hit->getMaterial()->Emission();
+                if(hit->photonCount == 0)
+                {
+                    hit->photonCount = 100;
+                    hit->radius = 1;
+                }
                 return;
             }
             ray = scatteredRay;
@@ -232,7 +237,7 @@ class SPPMRenderer: public Renderer
             return;
         int curDepth = 0;
         Vector3f totalAttenuate(radiance);
-        totalAttenuate = totalAttenuate * Vector3f(510,510,510);
+        totalAttenuate = totalAttenuate * Vector3f(1300,1300,1300);
         while(curDepth < MAX_TRACE_DEPTH)
         {
             curDepth ++;
@@ -276,7 +281,6 @@ public:
     virtual void render(SceneParser &parser, const char *outputFile)
     {
         Camera *camera = parser.getCamera();
-        std::cout << "camera" << std::endl;
         int width = camera->getWidth();
         int height = camera->getHeight();
         Group *baseGroup = parser.getGroup();
@@ -284,13 +288,13 @@ public:
         for(int i=0;i<width;i++)
             for(int j=0;j<height;j++)
                 visiblePoints.push_back(new Hit());
-        omp_set_num_threads(10);
+        omp_set_num_threads(NUM_THREADS);
         for(int i=0;i<roundCnt;i++)
         {
             fprintf(stdout, "round %d\n", i);
+            #pragma omp parallel for schedule(dynamic, 1) 
             for(int x=0;x<width;x++)
             {
-                #pragma omp parallel for schedule(dynamic, 1) 
                 for(int y=0;y<height;y++)
                 {
                     float xx = float(x + (RAND() - 0.5));
@@ -300,15 +304,37 @@ public:
                     getVisiblePoints(parser, camRay, visiblePoints[x*height+y]);
                 }
             }
+            printf("intersection finished\n");
+            fflush(stdout);
             buildTree();
+            printf("finish building\n");
             int averagePhotons = photonCnt / lightSources.size();
             #pragma omp parallel for schedule(dynamic, 1) 
             for(int x=0;x<averagePhotons;x++)
+            {
                 for(int y=0;y<lightSources.size();y++)
                 {
                     Ray r = lightSources[y]->generateRandomRay();
                     photonTrace(parser, r, lightSources[y]->getMaterial()->Emission());
                 }
+                if(x % 10000 == 0)
+                    printf("finish rendering photon %d\n", x);
+            }
+            if(i % 10 == 9)
+            {
+                Image img(width, height);
+                for(int u=0;u<width;u++)
+                    for(int v=0;v<height;v++)
+                    {
+                        Hit *hit = visiblePoints[u*height+v];
+                        img.SetPixel(u, v, hit->photonFlux / (PI * hit->radius * photonCnt * (i+1)) + hit->lightFlux / (i+1));
+                    }
+                string tmp = outputFile;
+                tmp = tmp.substr(0, tmp.size() - 4);
+                std::stringstream ss;
+                ss << tmp << "-" << (i + 1) << ".bmp";
+                img.SaveBMP(ss.str().c_str());
+            }
         }
         Image img(width, height);
         for(int u=0;u<width;u++)

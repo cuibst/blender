@@ -26,7 +26,8 @@ SET(PA3_SOURCES
         src/main.cpp
         src/mesh.cpp
         src/scene_parser.cpp
-        src/camera_controller.cpp)
+        src/camera_controller.cpp
+        src/texture.cpp)
 
 SET(PA3_INCLUDES
         include/camera.hpp
@@ -51,7 +52,9 @@ SET(PA3_INCLUDES
         include/bounding_box.hpp
         include/rectangles.hpp
         include/kdtree.hpp
-        include/bvh.hpp)
+        include/bvh.hpp
+        include/texture.hpp
+        include/stb_image.h)
 
 SET(CMAKE_CXX_STANDARD 11)
 SET(CMAKE_CXX_FLAGS "-fopenmp -g -O3 -Wno-deprecated-declarations")

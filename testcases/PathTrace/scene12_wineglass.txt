@@ -6,8 +6,8 @@ PerspectiveCamera {
     angle 30
     width 1024
     height 728
-    focalLength 131.4
-    aperture 0.2
+    focalLength 1
+    aperture 0
 }
 
 Lights {
@@ -91,9 +91,9 @@ Group {
     }
     MaterialIndex 5
     Transform {
-        ZRotate -8
         Translate  70 30 150
-        UniformScale 5
+        ZRotate -8
+        UniformScale 4
         RevSurface {
             profile BsplineCurve {
                 controls

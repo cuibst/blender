@@ -52,6 +52,7 @@ CMakeFiles/PA3.dir/src/main.cpp.o: ../include/object3d.hpp
 CMakeFiles/PA3.dir/src/main.cpp.o: ../include/ray.hpp
 CMakeFiles/PA3.dir/src/main.cpp.o: ../include/renderer.hpp
 CMakeFiles/PA3.dir/src/main.cpp.o: ../include/scene_parser.hpp
+CMakeFiles/PA3.dir/src/main.cpp.o: ../include/texture.hpp
 CMakeFiles/PA3.dir/src/main.cpp.o: ../include/utilities.hpp
 CMakeFiles/PA3.dir/src/main.cpp.o: ../src/main.cpp
 CMakeFiles/PA3.dir/src/main.cpp.o: /usr/include/GL/freeglut_std.h
@@ -73,6 +74,7 @@ CMakeFiles/PA3.dir/src/mesh.cpp.o: ../include/material.hpp
 CMakeFiles/PA3.dir/src/mesh.cpp.o: ../include/mesh.hpp
 CMakeFiles/PA3.dir/src/mesh.cpp.o: ../include/object3d.hpp
 CMakeFiles/PA3.dir/src/mesh.cpp.o: ../include/ray.hpp
+CMakeFiles/PA3.dir/src/mesh.cpp.o: ../include/texture.hpp
 CMakeFiles/PA3.dir/src/mesh.cpp.o: ../include/triangle.hpp
 CMakeFiles/PA3.dir/src/mesh.cpp.o: ../include/utilities.hpp
 CMakeFiles/PA3.dir/src/mesh.cpp.o: ../src/mesh.cpp
@@ -104,10 +106,24 @@ CMakeFiles/PA3.dir/src/scene_parser.cpp.o: ../include/rectangles.hpp
 CMakeFiles/PA3.dir/src/scene_parser.cpp.o: ../include/revsurface.hpp
 CMakeFiles/PA3.dir/src/scene_parser.cpp.o: ../include/scene_parser.hpp
 CMakeFiles/PA3.dir/src/scene_parser.cpp.o: ../include/sphere.hpp
+CMakeFiles/PA3.dir/src/scene_parser.cpp.o: ../include/texture.hpp
 CMakeFiles/PA3.dir/src/scene_parser.cpp.o: ../include/transform.hpp
 CMakeFiles/PA3.dir/src/scene_parser.cpp.o: ../include/triangle.hpp
 CMakeFiles/PA3.dir/src/scene_parser.cpp.o: ../include/utilities.hpp
 CMakeFiles/PA3.dir/src/scene_parser.cpp.o: ../src/scene_parser.cpp
 CMakeFiles/PA3.dir/src/scene_parser.cpp.o: /usr/include/GL/freeglut_std.h
 CMakeFiles/PA3.dir/src/scene_parser.cpp.o: /usr/include/GL/glut.h
+
+CMakeFiles/PA3.dir/src/texture.cpp.o: ../deps/vecmath/include/Matrix2f.h
+CMakeFiles/PA3.dir/src/texture.cpp.o: ../deps/vecmath/include/Matrix3f.h
+CMakeFiles/PA3.dir/src/texture.cpp.o: ../deps/vecmath/include/Matrix4f.h
+CMakeFiles/PA3.dir/src/texture.cpp.o: ../deps/vecmath/include/Quat4f.h
+CMakeFiles/PA3.dir/src/texture.cpp.o: ../deps/vecmath/include/Vector2f.h
+CMakeFiles/PA3.dir/src/texture.cpp.o: ../deps/vecmath/include/Vector3f.h
+CMakeFiles/PA3.dir/src/texture.cpp.o: ../deps/vecmath/include/Vector4f.h
+CMakeFiles/PA3.dir/src/texture.cpp.o: ../deps/vecmath/include/vecio.h
+CMakeFiles/PA3.dir/src/texture.cpp.o: ../deps/vecmath/include/vecmath.h
+CMakeFiles/PA3.dir/src/texture.cpp.o: ../include/stb_image.h
+CMakeFiles/PA3.dir/src/texture.cpp.o: ../include/texture.hpp
+CMakeFiles/PA3.dir/src/texture.cpp.o: ../src/texture.cpp
 

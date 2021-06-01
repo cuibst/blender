@@ -151,6 +151,8 @@ utilities.hpp
 ../include/utilities.hpp
 hit.hpp
 ../include/hit.hpp
+texture.hpp
+../include/texture.hpp
 iostream
 -
 glut.h
@@ -223,6 +225,8 @@ kdtree.hpp
 ../include/kdtree.hpp
 omp.h
 -
+sstream
+-
 
 ../include/revsurface.hpp
 object3d.hpp
@@ -254,6 +258,46 @@ vecmath.h
 cmath
 -
 glut.h
+-
+
+../include/stb_image.h
+stb_image.h
+../include/stb_image.h
+stdio.h
+-
+stdlib.h
+-
+limits.h
+-
+stdarg.h
+-
+stddef.h
+-
+stdlib.h
+-
+string.h
+-
+math.h
+-
+stdio.h
+-
+assert.h
+-
+stdint.h
+-
+emmintrin.h
+-
+intrin.h
+-
+arm_neon.h
+-
+
+../include/texture.hpp
+vecmath.h
+-
+string.h
+-
+stdio.h
 -
 
 ../include/transform.hpp
@@ -383,6 +427,12 @@ revsurface.hpp
 /home/yikai/Documents/computer-graphics-project-2021-spring/src/revsurface.hpp
 rectangles.hpp
 /home/yikai/Documents/computer-graphics-project-2021-spring/src/rectangles.hpp
+
+/home/yikai/Documents/computer-graphics-project-2021-spring/src/texture.cpp
+texture.hpp
+/home/yikai/Documents/computer-graphics-project-2021-spring/src/texture.hpp
+stb_image.h
+/home/yikai/Documents/computer-graphics-project-2021-spring/src/stb_image.h
 
 /usr/include/GL/freeglut_std.h
 windows.h

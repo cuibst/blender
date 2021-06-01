@@ -74,7 +74,7 @@ public:
         norm.normalize();
         if(Vector3f::dot(norm, r.getDirection()) >= 0)
             norm.negate();
-        h.set(x.x(), 0, 0, this->material, norm, r);
+        h.set(x.x(), x.z() / (2 * PI), x.y(), this->material, norm, r);
         return true;
     }
 

@@ -47,9 +47,9 @@ int main(int argc, char *argv[]) {
     if(colorizer == "--raycast")
         renderer = new PathTraceRender(30, USE_RAY_CAST);
     else if(colorizer == "--pathtrace")
-        renderer = new PathTraceRender(50, USE_PATH_TRACE);
+        renderer = new PathTraceRender(800, USE_PATH_TRACE);
     else if(colorizer == "--sppm")
-        renderer = new SPPMRenderer(100, 1000000);
+        renderer = new SPPMRenderer(1000, 1000000);
     renderer->render(parser, argv[2]);
     // cout << "Hello! Computer Graphics!" << endl;
     return 0;

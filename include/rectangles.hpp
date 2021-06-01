@@ -32,7 +32,11 @@ public:
 
     Vector3f getNorm(float u, float v)
     {
-        return n * Vector3f(0, 0, 1);
+        if(!material->hasBump())
+            return n * Vector3f(0, 0, 1);
+        float value = 0;
+        Vector2f grad = material->getBump().GradAt(u, v, value);
+        return Vector3f::cross(Vector3f(1, 0, 0) + grad[0] * n * Vector3f(0, 0, 1), Vector3f(0, 1, 0) + grad[1] * n * Vector3f(0, 0, 1)).normalized();
     }
 
     Ray generateRandomRay() override {
@@ -86,7 +90,11 @@ public:
 
     Vector3f getNorm(float u, float v)
     {
-        return n * Vector3f(0, 1, 0);
+        if(!material->hasBump())
+            return n * Vector3f(0, 1, 0);
+        float value = 0;
+        Vector2f grad = material->getBump().GradAt(u, v, value);
+        return Vector3f::cross(Vector3f(0, 0, 1) + grad[0] * n * Vector3f(0, 1, 0), Vector3f(1, 0, 0) + grad[1] * n * Vector3f(0, 1, 0)).normalized();
     }
 
     Ray generateRandomRay() override {
@@ -140,7 +148,11 @@ public:
 
     Vector3f getNorm(float u, float v)
     {
-        return n * Vector3f(1, 0, 0);
+        if(!material->hasBump())
+            return n * Vector3f(1, 0, 0);
+        float value = 0;
+        Vector2f grad = material->getBump().GradAt(u, v, value);
+        return Vector3f::cross(Vector3f(0, 1, 0) + grad[0] * n * Vector3f(1, 0, 0), Vector3f(0, 0, 1) + grad[1] * n * Vector3f(1, 0, 0)).normalized();
     }
 
     Ray generateRandomRay() override {
@@ -154,7 +166,7 @@ public:
             ret2 = 2.0 * Vector3f(drand48(), drand48(), drand48()) - Vector3f(1,1,1);
         }   while(ret2.squaredLength() >= 1.0);
 
-        return Ray(Vector3f(u, v, d), (ret2 + n*Vector3f(1, 0, 0)).normalized());
+        return Ray(Vector3f(d, u, v), (ret2 + n*Vector3f(1, 0, 0)).normalized());
     }
 
     bool getBoundingBox(BoundingBox &box) override {

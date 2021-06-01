@@ -9,6 +9,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/yikai/Documents/computer-graphics-project-2021-spring/src/main.cpp" "/home/yikai/Documents/computer-graphics-project-2021-spring/build/CMakeFiles/PA3.dir/src/main.cpp.o"
   "/home/yikai/Documents/computer-graphics-project-2021-spring/src/mesh.cpp" "/home/yikai/Documents/computer-graphics-project-2021-spring/build/CMakeFiles/PA3.dir/src/mesh.cpp.o"
   "/home/yikai/Documents/computer-graphics-project-2021-spring/src/scene_parser.cpp" "/home/yikai/Documents/computer-graphics-project-2021-spring/build/CMakeFiles/PA3.dir/src/scene_parser.cpp.o"
+  "/home/yikai/Documents/computer-graphics-project-2021-spring/src/texture.cpp" "/home/yikai/Documents/computer-graphics-project-2021-spring/build/CMakeFiles/PA3.dir/src/texture.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

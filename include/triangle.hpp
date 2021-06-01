@@ -14,6 +14,7 @@ using namespace std;
 class Triangle: public Object3D
 {
 	BoundingBox box;
+	Vector3f uDir, vDir;
 
 public:
 	Triangle() = delete;
@@ -27,6 +28,11 @@ public:
 		Vector3f min_point(fmin(vertices[0].x(), fmin(vertices[1].x(), vertices[2].x())), fmin(vertices[0].y(), fmin(vertices[1].y(), vertices[2].y())), fmin(vertices[0].z(), fmin(vertices[1].z(), vertices[2].z())));
 		Vector3f max_point(fmax(vertices[0].x(), fmax(vertices[1].x(), vertices[2].x())), fmax(vertices[0].y(), fmax(vertices[1].y(), vertices[2].y())), fmax(vertices[0].z(), fmax(vertices[1].z(), vertices[2].z())));
 		box = BoundingBox(min_point - 0.01f, max_point + 0.01f);
+		if(Vector3f::cross(this->normal.normalized(), Vector3f::UP).length() < eps)
+            this->vDir = Vector3f::FORWARD;
+        else
+            this->vDir = Vector3f::UP;
+        this->uDir = Vector3f::cross(this->normal.normalized(), this->vDir).normalized();
 	}
 
 	bool intersect( const Ray& ray,  Hit& hit , float tmin) override {

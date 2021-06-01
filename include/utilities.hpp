@@ -10,6 +10,7 @@
 #define INF_FLOAT 1e38
 #define MAX_TRACE_DEPTH 15
 #define DISCOUNT_COEFFICIENT 0.7f
+#define NUM_THREADS 10
 const double PI = acos(-1);
 
 #define thread_local __thread

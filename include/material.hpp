@@ -7,6 +7,7 @@
 #include "ray.hpp"
 #include "utilities.hpp"
 #include "hit.hpp"
+#include "texture.hpp"
 #include <iostream>
 #include <glut.h>
 
@@ -14,7 +15,11 @@
 class Material
 {
 public:
-    explicit Material(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0, const char *texture_name = "", const char *bump_name = "") : diffuseColor(d_color), specularColor(s_color), attenuation(atten), shininess(s) {}
+    explicit Material(const Vector3f &d_color = Vector3f::ZERO, const Vector3f &s_color = Vector3f::ZERO, const Vector3f &atten = Vector3f::ZERO, float s = 0, const char *texture_name = "", const char *bump_name = "") : diffuseColor(d_color), specularColor(s_color), attenuation(atten), shininess(s)
+    {
+        texture = Texture(texture_name);
+        bumpTexture = BumpTexture(bump_name);
+    }
 
     virtual ~Material() = default;
 
@@ -65,6 +70,16 @@ public:
         return fuzz;
     }
 
+    bool hasBump() const
+    {
+        return bumpTexture.hasTexture();
+    }
+
+    BumpTexture& getBump()
+    {
+        return bumpTexture;
+    }
+
 protected:
     Vector3f diffuseColor;
     Vector3f specularColor;
@@ -72,6 +87,8 @@ protected:
     float shininess;
     float fuzz;
     float refractionRate;
+    Texture texture;
+    BumpTexture bumpTexture;
 };
 
 class DiffuseLight : public Material
@@ -103,6 +120,8 @@ public:
 private:
     Vector3f getAttenuation(float u, float v)
     {
+        if(texture.hasTexture())
+            return texture.ColorAt(u, v);
         return this->attenuation;
     }
 };
@@ -126,6 +145,8 @@ private:
     }
     Vector3f getAttenuation(float u, float v)
     {
+        if(texture.hasTexture())
+            return texture.ColorAt(u, v);
         return this->attenuation;
     }
 };
@@ -171,6 +192,8 @@ public:
 
     Vector3f getAttenuation(float u, float v)
     {
+        if(texture.hasTexture())
+            return texture.ColorAt(u, v);
         return this->attenuation;
     }
 

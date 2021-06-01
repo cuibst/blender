@@ -11,6 +11,15 @@
 // TODO (PA2): Copy from PA1
 
 class Plane : public Object3D {
+    Vector3f getActualNormal(float u, float v) const
+    {
+        if(!material->hasBump())
+            return normal;
+        BumpTexture &bump = material->getBump();
+        float value = 0;
+        Vector2f grad = bump.GradAt(u, v, value);
+        return Vector3f::cross(uDir + grad[0] * normal.normalized(), vDir + grad[1] * normal.normalized());
+    }
 public:
     Plane() {
 
@@ -42,7 +51,7 @@ public:
         Vector3f hitPoint = r.pointAtParameter(actualT);
         float u = Vector3f::dot(hitPoint, uDir);
         float v = Vector3f::dot(hitPoint, vDir);
-        h.set(actualT, u, v, material, normal, r);
+        h.set(actualT, u, v, material, getActualNormal(u, v), r);
         return true;
     }
 
