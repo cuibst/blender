@@ -325,7 +325,7 @@ public:
                 if(x % 10000 == 0)
                     printf("finish rendering photon %d\n", x);
             }
-            if(true)
+            if(i <= 19 || i % 10 == 9)
             {
                 Image img(width, height);
                 for(int u=0;u<width;u++)
