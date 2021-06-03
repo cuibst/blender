@@ -34,6 +34,7 @@ public:
         if(!group->intersect(r, hit, 0))
             return parser.getBackgroundColor();
         Vector3f ret = Vector3f::ZERO;
+        // std::cout << "have intersection!" << std::endl;
         for(int _=0;_<parser.getNumLights();_++)
         {
             Light *light = parser.getLight(_);
@@ -165,9 +166,11 @@ public:
         for(int x=0;x<camera->getWidth();x++)
         {
             fprintf(stdout, "rendering column %d\n", x);
-            #pragma omp parallel for schedule(dynamic, 1) 
+            // #pragma omp parallel for schedule(dynamic, 1) 
             for(int y=0;y<camera->getHeight();y++)
             {
+                // printf("===================\n");
+                // printf("x=%d y=%d\n", x,y);
                 Vector3f color = Vector3f::ZERO;
                 for(int _=0;_<sampleCnt;_++)
                 {
@@ -177,8 +180,9 @@ public:
                     color += colorizer->Colorize(parser, camRay);
                 }
                 img.SetPixel(x, y, color / sampleCnt);
+                // break;
             }
-            
+            // break;
         }
         img.SaveBMP(outputFile);
     }
@@ -222,7 +226,7 @@ class SPPMRenderer: public Renderer
                 if(hit->photonCount == 0)
                 {
                     hit->photonCount = 100;
-                    hit->radius = 1;
+                    hit->radius = 0.1;
                 }
                 return;
             }
@@ -288,10 +292,11 @@ public:
         for(int i=0;i<width;i++)
             for(int j=0;j<height;j++)
                 visiblePoints.push_back(new Hit());
+        printf("Loading finished, start rendering\n");
         omp_set_num_threads(NUM_THREADS);
         for(int i=0;i<roundCnt;i++)
         {
-            fprintf(stdout, "round %d\n", i);
+            printf("rendering round %d\n", i);
             #pragma omp parallel for schedule(dynamic, 1) 
             for(int x=0;x<width;x++)
             {
@@ -320,7 +325,7 @@ public:
                 if(x % 10000 == 0)
                     printf("finish rendering photon %d\n", x);
             }
-            if(i % 10 == 9)
+            if(true)
             {
                 Image img(width, height);
                 for(int u=0;u<width;u++)

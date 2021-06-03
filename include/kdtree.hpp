@@ -65,7 +65,14 @@ public:
 
     void update(const Vector3f &photon, const Vector3f &attenuation, bool front)
     {
-        if(getRadius(photon) > maxRadius)
+        float ret = 0;
+        if (photon.x() > maxVertex.x()) ret += sqr(photon.x() - maxVertex.x());
+        if (photon.x() < minVertex.x()) ret += sqr(minVertex.x() - photon.x());
+        if (photon.y() > maxVertex.y()) ret += sqr(photon.y() - maxVertex.y());
+        if (photon.y() < minVertex.y()) ret += sqr(minVertex.y() - photon.y());
+        if (photon.z() > maxVertex.z()) ret += sqr(photon.z() - maxVertex.z());
+        if (photon.z() < minVertex.z()) ret += sqr(minVertex.z() - photon.z());
+        if(ret > maxRadius)
             return;
         if((hit->point - photon).squaredLength() <= hit->radius && hit->IsFrontFace() == front)
         {
@@ -84,16 +91,4 @@ public:
         if(rch)
             maxRadius = max(rch->maxRadius, maxRadius);
     }
-
-    float getRadius(const Vector3f& photon) {
-        float ret = 0;
-        if (photon.x() > maxVertex.x()) ret += powf(photon.x() - maxVertex.x(), 2);
-        if (photon.x() < minVertex.x()) ret += powf(minVertex.x() - photon.x(), 2);
-        if (photon.y() > maxVertex.y()) ret += powf(photon.y() - maxVertex.y(), 2);
-        if (photon.y() < minVertex.y()) ret += powf(minVertex.y() - photon.y(), 2);
-        if (photon.z() > maxVertex.z()) ret += powf(photon.z() - maxVertex.z(), 2);
-        if (photon.z() < minVertex.z()) ret += powf(minVertex.z() - photon.z(), 2);
-        return ret;
-    }
-
 };

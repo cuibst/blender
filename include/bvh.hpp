@@ -83,9 +83,15 @@ public:
 
     bool intersect(const Ray &r, Hit &h, float tmin) override
     {
+        // std::cout << "============" << std::endl;
+        // std::cout << "ray is origin:" << r.getOrigin() << " direction:" << r.getDirection() << std::endl;
+        // std::cout << "bounding box:" << box.x[0] << " " << box.y[0] << " " << box.z[0] << " " << box.x[1] << " " << box.y[1] << " " << box.z[1] << std::endl;
         float t_min, t_max;
         if(!box.intersect(r, t_min, t_max, tmin))
             return false;
+        // std::cout << "intersected! mn:" << t_min << " " << " mx:" << t_max << std::endl;
+        // std::cout << r.pointAtParameter(t_min) << " " << r.pointAtParameter(t_max) << std::endl;
+        // std::cout << "============" << std::endl;
         bool sh = obj->intersect(r, h, tmin), lh = lch ? lch->intersect(r, h, tmin) : false, rh = rch ? rch->intersect(r, h, tmin) : false;
         return sh || (lh || rh);
     }

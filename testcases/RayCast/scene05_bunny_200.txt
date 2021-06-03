@@ -40,8 +40,11 @@ Group {
     numObjects 1
 
     MaterialIndex 0
-    TriangleMesh {
-        obj_file mesh/bunny_200.obj
+    Transform {
+        UniformScale 2
+        TriangleMesh {
+            obj_file mesh/bunny.fine.obj
+        }
     }
 }
 

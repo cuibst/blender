@@ -42,7 +42,7 @@ Materials {
         texture texture/vase.png
     }
     MetalMaterial {
-        attenuation 1 1 1
+        attenuation 1 0 1
     }
     DielecMaterial {
         attenuation 1 1 1
@@ -54,7 +54,7 @@ Materials {
 }
 
 Group {
-    numObjects 9
+    numObjects 10
     MaterialIndex 0
     Plane {
         normal 1 0.1 0
@@ -87,13 +87,13 @@ Group {
     }
     MaterialIndex 4
     Sphere {
-    center 27 16.5 47
+        center 27 16.5 47
         radius 16.5
     }
     MaterialIndex 3
     Transform {
-        Translate  70 30 150
-        UniformScale 2
+        Translate  70 15 50
+        UniformScale 10
         RevSurface {
             profile BezierCurve {
                 controls
@@ -102,6 +102,16 @@ Group {
                     [ 0 0 0 ]
                     [ -2 -2 0 ]
             }
+        }
+    }
+    MaterialIndex 5
+    Transform {
+        Translate 60 30 100
+        UniformScale 10
+        ZRotate -45
+        XRotate 20
+        TriangleMesh {
+            obj_file mesh/cube.obj
         }
     }
     MaterialIndex 6

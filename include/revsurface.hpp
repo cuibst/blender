@@ -45,7 +45,7 @@ public:
         CurvePoint p;
         Vector3f dSdt, dSdf, F;
         Matrix3f dF;
-        for(int _=0;_<=30;_++)
+        for(int _=0;_<=15;_++)
         {
             p = pCurve->pointAtT(x.y());
             dSdt = Vector3f(cos(x.z()) * p.T.x(), p.T.y(), sin(x.z()) * p.T.x());
@@ -101,8 +101,9 @@ public:
             lt = dRegion.first + step * i, rt = dRegion.first + step * (i + 1);
             L = pCurve->pointAtT(lt), R = pCurve->pointAtT(rt);
             ylow = min(L.V.y(), R.V.y()), yhigh = max(L.V.y(), R.V.y());
+            float xhigh = max(fabs(L.V.x()), fabs(R.V.x()));
             
-            tmp = BoundingBox(-xmax, xmax, ylow, yhigh, -xmax, xmax);
+            tmp = BoundingBox(-xhigh, xhigh, ylow, yhigh, -xhigh, xhigh);
             bool tmpflag = tmp.intersect(rp, intermin, intermax, tmin);
             if(tmpflag && (inside || intermin < h.getT()))
             {

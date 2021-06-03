@@ -69,36 +69,128 @@ public:
     BoundingBox(const Vector3f &a, const Vector3f &b) : BoundingBox(min(a.x(), b.x()), max(a.x(), b.x()), min(a.y(), b.y()), max(a.y(), b.y()), min(a.z(), b.z()), max(a.z(), b.z())) {}
 
     bool intersect(const Ray &r, float &mn, float &mx, float tmin) {
-        mn = -1e38, mx = 1e38;
-        for(int i=0;i<3;i++)
+        bool flag1 = false, flag2 = false;
+        mn=mx=1e38;
+        if(fabs(r.getDirection()[0]) > eps)
         {
-            Hit hitmin, hitmax;
-            bool flag1, flag2;
-            flag1 = slab[i][0].intersect(r, hitmin, tmin);
-            flag2 = slab[i][1].intersect(r, hitmax, tmin);
-            float t1 = hitmin.getT(), t2 = hitmax.getT();
-            // cout << "t1=" << t1 << " t2=" << t2 << std::endl;
-            if(!flag1 && !flag2)
-                continue;
-            else if(!flag1)
+            float t0 = (x[0] - r.getOrigin()[0]) / r.getDirection()[0];
+            if(t0 > tmin)
             {
-                mx = min(mx, t2);
-                continue;
+                Vector3f possible = r.pointAtParameter(t0);
+                if(possible[1] > y[0] && possible[1] < y[1] && possible[2] > z[0] && possible[2] < z[1])
+                {
+                    if(!flag1)
+                    {
+                        flag1 = true;
+                        mn = t0;
+                    }
+                    else
+                    {
+                        flag2 = true;
+                        mx = t0;
+                    }
+                }
             }
-            else if(!flag2)
+            t0 = (x[1] - r.getOrigin()[0]) / r.getDirection()[0];
+            if(t0 > tmin)
             {
-                mx = min(mx, t1);
-                continue;
+                Vector3f possible = r.pointAtParameter(t0);
+                if(possible[1] > y[0] && possible[1] < y[1] && possible[2] > z[0] && possible[2] < z[1])
+                {
+                    if(!flag1)
+                    {
+                        flag1 = true;
+                        mn = t0;
+                    }
+                    else
+                    {
+                        flag2 = true;
+                        mx = t0;
+                    }
+                }
             }
-            if(t1 > t2)
-                swap(t1, t2);
-            mn = max(t1, mn);
-            mx = min(t2, mx);
         }
-        // std::cout<<mn<<" "<<mx<<std::endl;
-        if(mn > mx || mx < tmin)
-            return false;
-        return true;
+        if(fabs(r.getDirection()[1]) > eps)
+        {
+            float t0 = (y[0] - r.getOrigin()[1]) / r.getDirection()[1];
+            if(t0 > tmin)
+            {
+                Vector3f possible = r.pointAtParameter(t0);
+                if(possible[0] > x[0] && possible[0] < x[1] && possible[2] > z[0] && possible[2] < z[1])
+                {
+                    if(!flag1)
+                    {
+                        flag1 = true;
+                        mn = t0;
+                    }
+                    else
+                    {
+                        flag2 = true;
+                        mx = t0;
+                    }
+                }
+            }
+            t0 = (y[1] - r.getOrigin()[1]) / r.getDirection()[1];
+            if(t0 > tmin)
+            {
+                Vector3f possible = r.pointAtParameter(t0);
+                if(possible[0] > x[0] && possible[0] < x[1] && possible[2] > z[0] && possible[2] < z[1])
+                {
+                    if(!flag1)
+                    {
+                        flag1 = true;
+                        mn = t0;
+                    }
+                    else
+                    {
+                        flag2 = true;
+                        mx = t0;
+                    }
+                }
+            }
+        }
+        if(fabs(r.getDirection()[2]) > eps)
+        {
+            float t0 = (z[0] - r.getOrigin()[2]) / r.getDirection()[2];
+            if(t0 > tmin)
+            {
+                Vector3f possible = r.pointAtParameter(t0);
+                if(possible[0] > x[0] && possible[0] < x[1] && possible[1] > y[0] && possible[1] < y[1])
+                {
+                    if(!flag1)
+                    {
+                        flag1 = true;
+                        mn = t0;
+                    }
+                    else
+                    {
+                        flag2 = true;
+                        mx = t0;
+                    }
+                }
+            }
+            t0 = (z[1] - r.getOrigin()[2]) / r.getDirection()[2];
+            if(t0 > tmin)
+            {
+                Vector3f possible = r.pointAtParameter(t0);
+                if(possible[0] > x[0] && possible[0] < x[1] && possible[1] > y[0] && possible[1] < y[1])
+                {
+                    if(!flag1)
+                    {
+                        flag1 = true;
+                        mn = t0;
+                    }
+                    else
+                    {
+                        flag2 = true;
+                        mx = t0;
+                    }
+                }
+            }
+        }
+        if(mn > mx)
+            swap(mn, mx);
+        return flag1 || flag2;
     }
 
     static BoundingBox mergeBox(const BoundingBox &a, const BoundingBox &b)

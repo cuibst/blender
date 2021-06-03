@@ -15,6 +15,7 @@ class Triangle: public Object3D
 {
 	BoundingBox box;
 	Vector3f uDir, vDir;
+	float d;
 
 public:
 	Triangle() = delete;
@@ -33,23 +34,37 @@ public:
         else
             this->vDir = Vector3f::UP;
         this->uDir = Vector3f::cross(this->normal.normalized(), this->vDir).normalized();
+		this->d = Vector3f::dot(this->normal, a);
 	}
 
 	bool intersect( const Ray& ray,  Hit& hit , float tmin) override {
-        Vector3f rd = ray.getDirection();
-		Vector3f e1 = vertices[0] - vertices[1];
-		Vector3f e2 = vertices[0] - vertices[2];
-		Vector3f s = vertices[0] - ray.getOrigin();
-		float saveDet = Matrix3f(rd,e1,e2).determinant();
-		if(fabs(saveDet) < eps)
-			return false;
-		float actualT = Matrix3f(s,e1,e2).determinant()/saveDet;
-		float beta = Matrix3f(rd,s,e2).determinant()/saveDet;
-		float gamma = Matrix3f(rd,e1,s).determinant()/saveDet;
-		if(actualT < tmin || beta < 0 || gamma < 0 || beta > 1 || gamma > 1 || beta + gamma > 1 || actualT > hit.getT())
-			return false;
-		hit.set(actualT, 0, 0, material, normal, ray);
-		return true;
+		Vector3f r_dir = ray.getDirection();
+
+        if(abs(Vector3f::dot(r_dir.normalized(), this->normal.normalized())) < 1e-10)
+            return false;
+
+        float t = (this->d - Vector3f::dot(this->normal, ray.getOrigin())) / (Vector3f::dot(this->normal, ray.getDirection()));
+        
+		if (t < tmin || t > hit.getT() || isinf(t) || isnan(t) )
+            return false;
+
+		Vector3f inter_point = ray.pointAtParameter(t);
+		for (int i = 0; i < 3; i ++){
+			Vector3f line = inter_point - this->vertices[i];
+			Vector3f line_a = this->vertices[(i+1)%3] - this->vertices[i];
+			Vector3f line_b = this->vertices[(i+2)%3] - this->vertices[i];
+			if (Vector3f::dot(Vector3f::cross(line, line_a), Vector3f::cross(line, line_b)) > 0)
+				return false;
+		}
+
+		Vector3f hit_point = ray.pointAtParameter(t);
+		float v = Vector3f::dot(hit_point, vDir);
+        float u = Vector3f::dot(hit_point, uDir);
+		Vector3f norm = this->normal;
+
+        hit.set(t, u, v, this->material, norm, ray);
+
+        return true;
 	}
 	Vector3f normal;
 	Vector3f vertices[3];

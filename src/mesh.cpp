@@ -17,6 +17,7 @@ bool Mesh::intersect(const Ray &r, Hit &h, float tmin) {
     //     triangle.normal = n[triId];
     //     result |= triangle.intersect(r, h, tmin);
     // }
+    // std::cout << "intersect at " << h.getT() << std::endl;
     // return result;
     return root->intersect(r, h, tmin);
 }
