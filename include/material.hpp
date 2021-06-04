@@ -163,30 +163,18 @@ public:
         float index, reflect_prob, cos = -1 * Vector3f::dot(unit, hit.getNormal());
         Vector3f refract_ray;
         if (!hit.IsFrontFace())
-        {
             index = refractionRate;
-        }
         else
-        {
             index = 1.0 / refractionRate;
-        }
 
         if (refractRay(unit, hit.getNormal(), index, refract_ray))
-        {
             reflect_prob = Schlick(cos, refractionRate);
-        }
         else
-        {
             reflect_prob = 1.1;
-        }
         if (RAND() < reflect_prob)
-        {
             scattered = Ray(ray.pointAtParameter(hit.getT()), target);
-        }
         else
-        {
             scattered = Ray(ray.pointAtParameter(hit.getT()), refract_ray);
-        }
         return true;
     }
 

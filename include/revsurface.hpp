@@ -17,6 +17,8 @@ class RevSurface : public Object3D {
 
     BoundingBox *box;
 
+    BoundingBox boxes[10];
+
     std::pair<float, float> dRegion;
 
 public:
@@ -33,10 +35,21 @@ public:
         }
         dRegion = pCurve->definitionRegion();
         box = new BoundingBox(-xmax, xmax, ymin - 2, ymax + 2, -xmax, xmax);
+        double step = (dRegion.second - dRegion.first) / 10.0;
+        for(int i=0;i<10;i++)
+        {
+            float lt = dRegion.first + step * i, rt = dRegion.first + step * (i + 1);
+            CurvePoint L = pCurve->pointAtT(lt), R = pCurve->pointAtT(rt);
+            float ylow = min(L.V.y(), R.V.y()), yhigh = max(L.V.y(), R.V.y());
+            float xhigh = max(fabs(L.V.x()), fabs(R.V.x()));
+            
+            boxes[i] = BoundingBox(-xhigh, xhigh, ylow, yhigh, -xhigh, xhigh);
+        }
     }
 
     ~RevSurface() override {
         delete pCurve;
+        delete box;
     }
 
     bool tryIntersect(const Ray &r, Hit &h, float tmin, double Tbegin, double tbegin, double fbegin)
@@ -84,11 +97,7 @@ public:
         if(!box->intersect(r, intermin, intermax, tmin))
             return false;
         double step = (dRegion.second - dRegion.first) / 10.0;
-        BoundingBox tmp(0,0,0,0,0,0);
         bool flag = false;
-        double lt,rt;
-        CurvePoint L,R;
-        float ylow,yhigh;
         bool inside = (fabs(r.getOrigin().x()) < xmax && fabs(r.getOrigin().z()) < xmax && r.getOrigin().y() > ymin && r.getOrigin().y() < ymax);
         Ray rp = r;
         if(inside)
@@ -98,13 +107,8 @@ public:
         }
         for(int i=0;i<10;i++)
         {
-            lt = dRegion.first + step * i, rt = dRegion.first + step * (i + 1);
-            L = pCurve->pointAtT(lt), R = pCurve->pointAtT(rt);
-            ylow = min(L.V.y(), R.V.y()), yhigh = max(L.V.y(), R.V.y());
-            float xhigh = max(fabs(L.V.x()), fabs(R.V.x()));
-            
-            tmp = BoundingBox(-xhigh, xhigh, ylow, yhigh, -xhigh, xhigh);
-            bool tmpflag = tmp.intersect(rp, intermin, intermax, tmin);
+            float lt = dRegion.first + step * i, rt = dRegion.first + step * (i + 1);
+            bool tmpflag = boxes[i].intersect(rp, intermin, intermax, tmin);
             if(tmpflag && (inside || intermin < h.getT()))
             {
                 if(intermin > tmin)
@@ -226,6 +230,7 @@ public:
         box = (*this->box);
         return true;
     }
+
 };
 
 #endif //REVSURFACE_HPP

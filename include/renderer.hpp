@@ -166,7 +166,7 @@ public:
         for(int x=0;x<camera->getWidth();x++)
         {
             fprintf(stdout, "rendering column %d\n", x);
-            // #pragma omp parallel for schedule(dynamic, 1) 
+            #pragma omp parallel for schedule(dynamic, 1) 
             for(int y=0;y<camera->getHeight();y++)
             {
                 // printf("===================\n");
