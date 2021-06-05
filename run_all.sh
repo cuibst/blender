@@ -39,7 +39,8 @@ cd ..
 # bin/PA3 testcases/PathTrace/scene13_complex_objects.txt output/scene13-pt.bmp --pathtrace
 # bin/PA3 testcases/PathTrace/scene14_texture.txt output/scene14-pt.bmp --pathtrace
 # bin/PA3 testcases/PathTrace/scene15_vase.txt output/scene15-pt.bmp --pathtrace
-bin/PA3 testcases/PathTrace/scene16_bump.txt output/scene16-pt.bmp --pathtrace
+# bin/PA3 testcases/PathTrace/scene16_bump.txt output/scene16-pt.bmp --pathtrace
+# bin/PA3 testcases/PathTrace/scene17_aperture.txt output/scene17-pt.bmp --pathtrace
 
 # SPPM testcases.
 # bin/PA3 testcases/PathTrace/scene11_basic.txt output/scene11/scene11-sppm.bmp --sppm
@@ -47,4 +48,9 @@ bin/PA3 testcases/PathTrace/scene16_bump.txt output/scene16-pt.bmp --pathtrace
 # bin/PA3 testcases/PathTrace/scene13_complex_objects.txt output/scene13/scene13-sppm.bmp --sppm
 # bin/PA3 testcases/PathTrace/scene14_texture.txt output/scene14/scene14-sppm.bmp --sppm
 # bin/PA3 testcases/PathTrace/scene15_vase.txt output/scene15/scene15-sppm.bmp --sppm
-bin/PA3 testcases/PathTrace/scene16_bump.txt output/scene16/scene16-sppm.bmp --sppm
+# bin/PA3 testcases/PathTrace/scene16_bump.txt output/scene16/scene16-sppm.bmp --sppm
+# bin/PA3 testcases/PathTrace/scene17_aperture.txt output/scene17/scene17-sppm.bmp --sppm
+bin/PA3 testcases/PathTrace/scene18_final.txt output/scene18/scene18-sppm.bmp --sppm
+
+# temporary cases
+bin/PA3 testcases/PathTrace/scene13_complex_objects.txt output/scene13-pt.bmp --pathtrace

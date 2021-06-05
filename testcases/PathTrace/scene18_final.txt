@@ -1,0 +1,340 @@
+
+PerspectiveCamera {
+    center 50 52 280
+    direction 0 -0.1 -1
+    up 0 1 0
+    angle 30
+    width 1920
+    height 1080
+    focalLength 1
+    aperture 0
+}
+
+Lights {
+    numLights 2
+    DirectionalLight {
+        direction -0.5 -0.5 -1
+        color 0.5 0.5 0.5 
+    }
+    PointLight {
+      position 50 60 70
+      color 12 12 12
+    }
+}
+
+Background {
+    color 0.1 0.2 0.7
+}
+
+Materials {
+    numMaterials 16
+    DiffuseMaterial { 
+        attenuation 0.75 0.25 0.25
+    }
+    DiffuseMaterial { 
+        attenuation 0.25 0.25 0.75 
+    }
+    DiffuseMaterial { 
+        attenuation 0.75 0.75 0.75 
+    }
+    DiffuseMaterial { 
+        attenuation 0.75 0.75 0.75
+        texture texture/vase.png
+    }
+    MetalMaterial {
+        attenuation 1 0 1
+    }
+    DielecMaterial {
+        attenuation 1 1 1
+        refractive 1.5
+    }
+    LightMaterial {
+        specularColor 12 12 12
+    }
+    DielecMaterial {
+        attenuation 1 1 1
+        refractive 1.5
+    }
+    DielecMaterial {
+        attenuation 0.6 1 1
+        refractive 1.5
+    }
+    DielecMaterial {
+        attenuation 1 0.6 1
+        refractive 1.5
+    }
+    DielecMaterial {
+        attenuation 1 1 0.6
+        refractive 1.5
+    }
+    DielecMaterial {
+        attenuation 0.6 0.6 1
+        refractive 1.5
+    }
+    DielecMaterial {
+        attenuation 1 0.6 0.6
+        refractive 1.5
+    }
+    DielecMaterial {
+        attenuation 0.6 1 0.6
+        refractive 1.5
+    }
+    MetalMaterial {
+        attenuation 1 1 1
+    }
+    DiffuseMaterial { 
+        attenuation 0.9 0.9 0.9
+        texture texture/wood4.jpg
+    }
+}
+
+Group {
+    numObjects 38
+    MaterialIndex 0
+    Plane {
+        normal 1 0.1 0
+        offset 1
+    }
+    MaterialIndex 1
+    Plane {
+        normal -1 0.1 0
+        offset -99 
+    }
+    MaterialIndex 2
+    Plane {
+        normal 0 0.1 1
+        offset 0
+    }
+    MaterialIndex 2
+    Plane {
+        normal 0 0.1 -1
+        offset -315.6
+    }
+    MaterialIndex 15
+    XZRectangle {
+        points 0 0 99 316
+        offset 0
+        normal 1
+    }
+    MaterialIndex 2
+    Plane {
+        normal 0 -1 0
+        offset -81.6
+    }
+    MaterialIndex 4
+    Sphere {
+        center 27 16.5 47
+        radius 16.5
+    }
+    MaterialIndex 3
+    Transform {
+        Translate  70 15 50
+        UniformScale 10
+        RevSurface {
+            profile BezierCurve {
+                controls
+                    [ -2 2 0 ]
+                    [ -4 0 0 ]
+                    [ 0 0 0 ]
+                    [ -2 -2 0 ]
+            }
+        }
+    }
+    MaterialIndex 7
+    Transform {
+        Translate 25 5 105
+        UniformScale 5
+        TriangleMesh {
+            obj_file mesh/cube.obj
+        }
+    }
+    MaterialIndex 8
+    Transform {
+        Translate 25 5 95
+        UniformScale 5
+        TriangleMesh {
+            obj_file mesh/cube.obj
+        }
+    }
+    MaterialIndex 9
+    Transform {
+        Translate 25 5 85
+        UniformScale 5
+        TriangleMesh {
+            obj_file mesh/cube.obj
+        }
+    }
+    MaterialIndex 10
+    Transform {
+        Translate 35 5 105
+        UniformScale 5
+        TriangleMesh {
+            obj_file mesh/cube.obj
+        }
+    }
+    MaterialIndex 11
+    Transform {
+        Translate 35 5 95
+        UniformScale 5
+        TriangleMesh {
+            obj_file mesh/cube.obj
+        }
+    }
+    MaterialIndex 12
+    Transform {
+        Translate 35 5 85
+        UniformScale 5
+        TriangleMesh {
+            obj_file mesh/cube.obj
+        }
+    }
+    MaterialIndex 13
+    Transform {
+        Translate 45 5 105
+        UniformScale 5
+        TriangleMesh {
+            obj_file mesh/cube.obj
+        }
+    }
+    MaterialIndex 7
+    Transform {
+        Translate 45 5 95
+        UniformScale 5
+        TriangleMesh {
+            obj_file mesh/cube.obj
+        }
+    }
+    MaterialIndex 8
+    Transform {
+        Translate 45 5 85
+        UniformScale 5
+        TriangleMesh {
+            obj_file mesh/cube.obj
+        }
+    }
+    MaterialIndex 9
+    Transform {
+        Translate 30 15 100
+        UniformScale 5
+        TriangleMesh {
+            obj_file mesh/cube.obj
+        }
+    }
+    MaterialIndex 10
+    Transform {
+        Translate 40 15 100
+        UniformScale 5
+        TriangleMesh {
+            obj_file mesh/cube.obj
+        }
+    }
+    MaterialIndex 11
+    Transform {
+        Translate 30 15 90
+        UniformScale 5
+        TriangleMesh {
+            obj_file mesh/cube.obj
+        }
+    }
+    MaterialIndex 12
+    Transform {
+        Translate 40 15 90
+        UniformScale 5
+        TriangleMesh {
+            obj_file mesh/cube.obj
+        }
+    }
+    MaterialIndex 13
+    Transform {
+        Translate 35 25 95
+        UniformScale 5
+        TriangleMesh {
+            obj_file mesh/cube.obj
+        }
+    }
+    MaterialIndex 13
+    Sphere {
+        center 70 5 105
+        radius 5
+    }
+    MaterialIndex 12
+    Sphere {
+        center 80 5 105
+        radius 5
+    }
+    MaterialIndex 11
+    Sphere {
+        center 90 5 105
+        radius 5
+    }
+    MaterialIndex 10
+    Sphere {
+        center 70 5 95
+        radius 5
+    }
+    MaterialIndex 9
+    Sphere {
+        center 80 5 95
+        radius 5
+    }
+    MaterialIndex 8
+    Sphere {
+        center 90 5 95
+        radius 5
+    }
+    MaterialIndex 7
+    Sphere {
+        center 70 5 85
+        radius 5
+    }
+    MaterialIndex 13
+    Sphere {
+        center 80 5 85
+        radius 5
+    }
+    MaterialIndex 12
+    Sphere {
+        center 90 5 85
+        radius 5
+    }
+    MaterialIndex 11
+    Sphere {
+        center 75 12.071 90
+        radius 5
+    }
+    MaterialIndex 10
+    Sphere {
+        center 75 12.071 100
+        radius 5
+    }
+    MaterialIndex 9
+    Sphere {
+        center 85 12.071 90
+        radius 5
+    }
+    MaterialIndex 8
+    Sphere {
+        center 85 12.071 100
+        radius 5
+    }
+    MaterialIndex 7
+    Sphere {
+        center 80 19.142 95
+        radius 5
+    }
+    MaterialIndex 6
+    XZRectangle {
+        points 27 60 73 80
+        offset 81.0
+        normal -1
+    }
+    MaterialIndex 7
+    Transform {
+        Translate 55 7 115
+        UniformScale 10
+        TriangleMesh {
+            obj_file mesh/fixed.perfect.dragon.100K.0.07.obj
+        }
+    }
+}
+

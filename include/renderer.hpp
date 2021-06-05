@@ -223,18 +223,13 @@ class SPPMRenderer: public Renderer
             {
                 hit->attenuation = totalAttenuate;
                 hit->lightFlux += totalAttenuate * hit->getMaterial()->Emission();
-                if(hit->photonCount == 0)
-                {
-                    hit->photonCount = 100;
-                    hit->radius = 0.1;
-                }
                 return;
             }
             ray = scatteredRay;
         }
     }
 
-    void photonTrace(SceneParser &parser, Ray &ray, const Vector3f &radiance)
+    void photonTrace(SceneParser &parser, Ray &ray, const Vector3f &radiance, bool noDiffuse = false)
     {
         Group *baseGroup = parser.getGroup();
         if(baseGroup == nullptr)
@@ -242,6 +237,7 @@ class SPPMRenderer: public Renderer
         int curDepth = 0;
         Vector3f totalAttenuate(radiance);
         totalAttenuate = totalAttenuate * Vector3f(1300,1300,1300);
+        bool passFlag = false;
         while(curDepth < MAX_TRACE_DEPTH)
         {
             curDepth ++;
@@ -251,14 +247,19 @@ class SPPMRenderer: public Renderer
             Ray scatteredRay(ray);
             Vector3f attenuate;
             bool scatterFlag = hit.getMaterial()->Scatter(ray, hit, attenuate, scatteredRay);
-
             if(dynamic_cast<DiffuseMaterial*>(hit.getMaterial()))
-                root->update(hit.point, totalAttenuate, hit.IsFrontFace());
+            {
+                if(passFlag || !noDiffuse)
+                    root->update(hit.point, totalAttenuate, hit.IsFrontFace());
+                if(noDiffuse)
+                    return;
+            }
             if(scatterFlag)
                 totalAttenuate = totalAttenuate * attenuate;
             else
                 return;
             ray = scatteredRay;
+            passFlag = true;
         }
     }
 
@@ -325,6 +326,17 @@ public:
                 if(x % 10000 == 0)
                     printf("finish rendering photon %d\n", x);
             }
+            #pragma omp parallel for schedule(dynamic, 1) 
+            for(int x=0;x<max(80000,averagePhotons/4);x++) //caustics photons
+            {
+                for(int y=0;y<lightSources.size();y++)
+                {
+                    Ray r = lightSources[y]->generateRandomRay();
+                    photonTrace(parser, r, lightSources[y]->getMaterial()->Emission(), true);
+                }
+                if(x % 10000 == 0)
+                    printf("finish rendering caustic photon %d\n", x);
+            }
             if(i <= 19 || i % 10 == 9)
             {
                 Image img(width, height);
@@ -332,7 +344,7 @@ public:
                     for(int v=0;v<height;v++)
                     {
                         Hit *hit = visiblePoints[u*height+v];
-                        img.SetPixel(u, v, hit->photonFlux / (PI * hit->radius * photonCnt * (i+1)) + hit->lightFlux / (i+1));
+                        img.SetPixel(u, v, hit->photonFlux / (PI * hit->radius * (photonCnt + max(80000,averagePhotons/4)) * (i+1)) + hit->lightFlux / (i+1));
                     }
                 string tmp = outputFile;
                 tmp = tmp.substr(0, tmp.size() - 4);
@@ -341,12 +353,13 @@ public:
                 img.SaveBMP(ss.str().c_str());
             }
         }
+        int averagePhotons = photonCnt / lightSources.size();
         Image img(width, height);
         for(int u=0;u<width;u++)
             for(int v=0;v<height;v++)
             {
                 Hit *hit = visiblePoints[u*height+v];
-                img.SetPixel(u, v, hit->photonFlux / (PI * hit->radius * photonCnt * roundCnt) + hit->lightFlux / roundCnt);
+                img.SetPixel(u, v, hit->photonFlux / (PI * hit->radius * (photonCnt + max(80000,averagePhotons/4)) * roundCnt) + hit->lightFlux / roundCnt);
             }
         img.SaveBMP(outputFile);
     }

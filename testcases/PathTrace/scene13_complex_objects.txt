@@ -87,7 +87,7 @@ Group {
     }
     MaterialIndex 4
     Transform {
-        Translate 27 25 85
+        Translate 27 3 85
         UniformScale 200
         TriangleMesh {
             obj_file mesh/bunny.fine.obj
