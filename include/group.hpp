@@ -31,10 +31,10 @@ public:
 
     }
 
-    bool intersect(const Ray &r, Hit &h, float tmin) override {
+    bool intersect(const Ray &r, Hit &h, float tmin, float T) override {
         bool ret = false;
         for(Object3D* obj : objects) {
-            ret = obj->intersect(r,h,tmin) || ret;
+            ret = obj->intersect(r,h,tmin,T) || ret;
         }
         return ret;
         // if(root == nullptr)

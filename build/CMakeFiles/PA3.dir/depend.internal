@@ -100,6 +100,7 @@ CMakeFiles/PA3.dir/src/scene_parser.cpp.o
  ../include/light.hpp
  ../include/material.hpp
  ../include/mesh.hpp
+ ../include/move.hpp
  ../include/object3d.hpp
  ../include/plane.hpp
  ../include/ray.hpp

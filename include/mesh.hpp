@@ -26,7 +26,7 @@ public:
     std::vector<Vector3f> v;
     std::vector<TriangleIndex> t;
     std::vector<Vector3f> n;
-    bool intersect(const Ray &r, Hit &h, float tmin) override;
+    bool intersect(const Ray &r, Hit &h, float tmin, float T) override;
 
     void drawGL() override {
         // TODO (PA2): Call drawGL for each individual triangle.

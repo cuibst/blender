@@ -12,6 +12,8 @@
 
 using namespace std;
 
+extern float timeLimit;
+
 class Renderer
 {
 public:
@@ -21,17 +23,17 @@ public:
 class Colorizer
 {
 public:
-    virtual Vector3f Colorize(SceneParser &parser, const Ray &r) = 0;
+    virtual Vector3f Colorize(SceneParser &parser, const Ray &r, float T) = 0;
 };
 
 class RayCastColorizer : public Colorizer
 {
 public:
-    virtual Vector3f Colorize(SceneParser &parser, const Ray &r) override
+    virtual Vector3f Colorize(SceneParser &parser, const Ray &r, float T) override
     {
         Group *group = parser.getGroup();
         Hit hit;
-        if(!group->intersect(r, hit, 0))
+        if(!group->intersect(r, hit, 0, T))
             return parser.getBackgroundColor();
         Vector3f ret = Vector3f::ZERO;
         // std::cout << "have intersection!" << std::endl;
@@ -48,11 +50,11 @@ public:
 
 class PathTraceColorizer : public Colorizer
 {
-    Vector3f getColor(SceneParser &parser,const Ray &r, int depth, Vector3f attenuate)
+    Vector3f getColor(SceneParser &parser,const Ray &r, int depth, Vector3f attenuate, float T)
     {
         Group *group = parser.getGroup();
         Hit hit;
-        if(!group->intersect(r, hit, 0.0001))
+        if(!group->intersect(r, hit, 0.0001, T))
             return parser.getBackgroundColor();
         Vector3f ret = hit.getMaterial()->Emission();
         Ray scatteredRay(r);
@@ -62,14 +64,14 @@ class PathTraceColorizer : public Colorizer
         if(attenuate.x() < 1e-3 && attenuate.y() < 1e-3 && attenuate.z() < 1e-3)
             return ret;
         if(depth < MAX_TRACE_DEPTH && scatterFlag)
-            return ret + getColor(parser, scatteredRay, depth + 1, attenuate) * nxtAtten;
+            return ret + getColor(parser, scatteredRay, depth + 1, attenuate, T) * nxtAtten;
         return ret;
     }
 
 public:
-    virtual Vector3f Colorize(SceneParser &parser, const Ray &r) override
+    virtual Vector3f Colorize(SceneParser &parser, const Ray &r, float T) override
     {
-        return getColor(parser, r, 1, Vector3f(1,1,1));
+        return getColor(parser, r, 1, Vector3f(1,1,1), T);
         // Group *group = parser.getGroup();
         // Hit hit;
         // if(!group->intersect(r, hit, 0.0001))
@@ -177,7 +179,8 @@ public:
                     float xx = float(x + (RAND() - 0.5));
                     float yy = float(y + (RAND() - 0.5));
                     Ray camRay = camera->generateRay(Vector2f(xx, yy));
-                    color += colorizer->Colorize(parser, camRay);
+                    float T = drand48() * timeLimit;
+                    color += colorizer->Colorize(parser, camRay, T);
                 }
                 img.SetPixel(x, y, color / sampleCnt);
                 // break;
@@ -197,7 +200,7 @@ class SPPMRenderer: public Renderer
 
     int roundCnt, photonCnt;
 
-    void getVisiblePoints(SceneParser &parser, Ray &ray, Hit *hit)
+    void getVisiblePoints(SceneParser &parser, Ray &ray, Hit *hit, float T)
     {
         Group *baseGroup = parser.getGroup();
         if(baseGroup == nullptr)
@@ -208,7 +211,7 @@ class SPPMRenderer: public Renderer
         {
             curDepth ++;
             hit->setT(1e38);
-            if(!baseGroup->intersect(ray, *hit, eps))
+            if(!baseGroup->intersect(ray, *hit, eps, T))
             {
                 hit->lightFlux += hit->attenuation * parser.getBackgroundColor();
                 return;
@@ -229,7 +232,7 @@ class SPPMRenderer: public Renderer
         }
     }
 
-    void photonTrace(SceneParser &parser, Ray &ray, const Vector3f &radiance, bool noDiffuse = false)
+    void photonTrace(SceneParser &parser, Ray &ray, const Vector3f &radiance, float T, bool noDiffuse = false)
     {
         Group *baseGroup = parser.getGroup();
         if(baseGroup == nullptr)
@@ -242,7 +245,7 @@ class SPPMRenderer: public Renderer
         {
             curDepth ++;
             Hit hit;
-            if(!baseGroup->intersect(ray, hit, 1e-6))
+            if(!baseGroup->intersect(ray, hit, 1e-6, T))
                 return;
             Ray scatteredRay(ray);
             Vector3f attenuate;
@@ -298,6 +301,7 @@ public:
         for(int i=0;i<roundCnt;i++)
         {
             printf("rendering round %d\n", i);
+            float T = drand48() * timeLimit;
             #pragma omp parallel for schedule(dynamic, 1) 
             for(int x=0;x<width;x++)
             {
@@ -307,7 +311,7 @@ public:
                     float yy = float(y + (RAND() - 0.5));
                     Ray camRay = camera->generateRay(Vector2f(xx, yy));
                     visiblePoints[x*height+y]->setT(1e38);
-                    getVisiblePoints(parser, camRay, visiblePoints[x*height+y]);
+                    getVisiblePoints(parser, camRay, visiblePoints[x*height+y], T);
                 }
             }
             printf("intersection finished\n");
@@ -321,7 +325,7 @@ public:
                 for(int y=0;y<lightSources.size();y++)
                 {
                     Ray r = lightSources[y]->generateRandomRay();
-                    photonTrace(parser, r, lightSources[y]->getMaterial()->Emission());
+                    photonTrace(parser, r, lightSources[y]->getMaterial()->Emission(), T);
                 }
                 if(x % 10000 == 0)
                     printf("finish rendering photon %d\n", x);
@@ -332,7 +336,7 @@ public:
                 for(int y=0;y<lightSources.size();y++)
                 {
                     Ray r = lightSources[y]->generateRandomRay();
-                    photonTrace(parser, r, lightSources[y]->getMaterial()->Emission(), true);
+                    photonTrace(parser, r, lightSources[y]->getMaterial()->Emission(), T, true);
                 }
                 if(x % 10000 == 0)
                     printf("finish rendering caustic photon %d\n", x);

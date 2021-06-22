@@ -20,7 +20,7 @@ public:
 
     // PA1: Intersect Ray with this object. If hit, store information in hit structure.
     // This will not be used in PA2.
-    virtual bool intersect(const Ray &r, Hit &h, float tmin) = 0;
+    virtual bool intersect(const Ray &r, Hit &h, float tmin, float T) = 0;
 
     // PA2: draw using OpenGL pipeline.
     virtual void drawGL() {

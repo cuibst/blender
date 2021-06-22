@@ -9,7 +9,7 @@ public:
 
     XYRectangle(float x0, float y0, float x1, float y1, float d, float n, Material *mat) : Object3D(mat), x0(x0), y0(y0), x1(x1), y1(y1), d(d), n(n) {}
 
-    virtual bool intersect(const Ray &r, Hit &h, float tmin) override
+    virtual bool intersect(const Ray &r, Hit &h, float tmin, float T) override
     {
 
         if (fabs(r.getDirection().z()) < 1e-10)
@@ -67,7 +67,7 @@ public:
 
     XZRectangle(float x0, float z0, float x1, float z1, float d, float n, Material *mat) : Object3D(mat), x0(x0), z0(z0), x1(x1), z1(z1), d(d), n(n) {}
 
-    virtual bool intersect(const Ray &r, Hit &h, float tmin) override
+    virtual bool intersect(const Ray &r, Hit &h, float tmin, float T) override
     {
 
         if (fabs(r.getDirection().y()) < 1e-10)
@@ -125,7 +125,7 @@ public:
 
     YZRectangle(float y0, float z0, float y1, float z1, float d, float n, Material *mat) : Object3D(mat), y0(y0), z0(z0), y1(y1), z1(z1), d(d), n(n) {}
 
-    virtual bool intersect(const Ray &r, Hit &h, float tmin) override
+    virtual bool intersect(const Ray &r, Hit &h, float tmin, float T) override
     {
 
         if (fabs(r.getDirection().x()) < 1e-10)

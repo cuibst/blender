@@ -38,7 +38,7 @@ public:
 
     ~Plane() override = default;
 
-    bool intersect(const Ray &r, Hit &h, float tmin) override {
+    bool intersect(const Ray &r, Hit &h, float tmin, float T) override {
         float proj = Vector3f::dot(normal, r.getDirection());
         if(fabs(proj) < eps)
         {

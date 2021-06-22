@@ -17,12 +17,15 @@
 #include "curve.hpp"
 #include "revsurface.hpp"
 #include "rectangles.hpp"
+#include "move.hpp"
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
 
 #define DegreesToRadians(x) ((M_PI * x) / 180.0f)
+
+float timeLimit = 0;
 
 SceneParser::SceneParser(const char *filename) {
 
@@ -96,6 +99,8 @@ void SceneParser::parseFile() {
             parseMaterials();
         } else if (!strcmp(token, "Group")) {
             group = parseGroup();
+        } else if (!strcmp(token, "Time")) {
+            timeLimit = readFloat();
         } else {
             printf("Unknown token in parseFile: '%s'\n", token);
             exit(0);
@@ -333,6 +338,8 @@ Object3D *SceneParser::parseObject(char token[MAX_PARSER_TOKEN_LENGTH]) {
         answer = (Object3D *) parseYZRectangle();
     } else if (!strcmp(token, "XZRectangle")) {
         answer = (Object3D *) parseXZRectangle();
+    } else if (!strcmp(token, "Move")) {
+        answer = (Object3D *) parseMove();
     } else {
         printf("Unknown token in parseObject: '%s'\n", token);
         exit(0);
@@ -530,6 +537,37 @@ RevSurface *SceneParser::parseRevSurface() {
     assert (!strcmp(token, "}"));
     auto *answer = new RevSurface(profile, current_material);
     return answer;
+}
+
+Move *SceneParser::parseMove() {
+    char token[MAX_PARSER_TOKEN_LENGTH];
+    Vector3f velocity = Vector3f::ZERO, alpha = Vector3f::ZERO;
+    Object3D *object = nullptr;
+    getToken(token);
+    assert (!strcmp(token, "{"));
+    // read in transformations: 
+    // apply to the LEFT side of the current matrix (so the first
+    // transform in the list is the last applied to the object)
+    getToken(token);
+
+    while (true) {
+        if (!strcmp(token, "Velocity")) {
+            velocity = readVector3f();
+        } else if (!strcmp(token, "Alpha")) {
+            alpha = readVector3f();
+        } else {
+            // otherwise this must be an object,
+            // and there are no more transformations
+            object = parseObject(token);
+            break;
+        }
+        getToken(token);
+    }
+
+    assert(object != nullptr);
+    getToken(token);
+    assert (!strcmp(token, "}"));
+    return new Move(velocity, alpha, object);
 }
 
 Transform *SceneParser::parseTransform() {

@@ -99,6 +99,7 @@ CMakeFiles/PA3.dir/src/scene_parser.cpp.o: ../include/hit.hpp
 CMakeFiles/PA3.dir/src/scene_parser.cpp.o: ../include/light.hpp
 CMakeFiles/PA3.dir/src/scene_parser.cpp.o: ../include/material.hpp
 CMakeFiles/PA3.dir/src/scene_parser.cpp.o: ../include/mesh.hpp
+CMakeFiles/PA3.dir/src/scene_parser.cpp.o: ../include/move.hpp
 CMakeFiles/PA3.dir/src/scene_parser.cpp.o: ../include/object3d.hpp
 CMakeFiles/PA3.dir/src/scene_parser.cpp.o: ../include/plane.hpp
 CMakeFiles/PA3.dir/src/scene_parser.cpp.o: ../include/ray.hpp

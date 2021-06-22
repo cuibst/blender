@@ -50,3 +50,12 @@ inline Vector3f max(const Vector3f &a,const Vector3f &b)
 {
     return Vector3f(max(a.x(),b.x()), max(a.y(),b.y()), max(a.z(), b.z()));
 }
+
+inline Vector3f transformPoint(const Matrix4f &mat, const Vector3f &point) {
+    return (mat * Vector4f(point, 1)).xyz();
+}
+
+// transform a 3D directino using a matrix, returning a direction
+inline Vector3f transformDirection(const Matrix4f &mat, const Vector3f &dir) {
+    return (mat * Vector4f(dir, 0)).xyz();
+}

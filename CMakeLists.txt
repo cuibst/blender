@@ -54,7 +54,8 @@ SET(PA3_INCLUDES
         include/kdtree.hpp
         include/bvh.hpp
         include/texture.hpp
-        include/stb_image.h)
+        include/stb_image.h
+        include/move.hpp)
 
 SET(CMAKE_CXX_STANDARD 11)
 SET(CMAKE_CXX_FLAGS "-fopenmp -g -O3 -Wno-deprecated-declarations")

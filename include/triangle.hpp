@@ -37,7 +37,7 @@ public:
 		this->d = Vector3f::dot(this->normal, a);
 	}
 
-	bool intersect( const Ray& ray,  Hit& hit , float tmin) override {
+	bool intersect( const Ray& ray,  Hit& hit , float tmin, float T) override {
 		Vector3f r_dir = ray.getDirection();
 
         if(abs(Vector3f::dot(r_dir.normalized(), this->normal.normalized())) < 1e-10)

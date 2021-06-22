@@ -19,6 +19,7 @@ class RevSurface;
 class XYRectangle;
 class YZRectangle;
 class XZRectangle;
+class Move;
 
 #define MAX_PARSER_TOKEN_LENGTH 1024
 
@@ -83,6 +84,8 @@ private:
     XYRectangle *parseXYRectangle();
     XZRectangle *parseXZRectangle();
     YZRectangle *parseYZRectangle();
+    Move *parseMove();
+
 
     int getToken(char token[MAX_PARSER_TOKEN_LENGTH]);
 

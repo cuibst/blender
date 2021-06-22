@@ -172,6 +172,14 @@ Vector3f.h
 bvh.hpp
 ../include/bvh.hpp
 
+../include/move.hpp
+vecmath.h
+-
+object3d.hpp
+../include/object3d.hpp
+utilities.hpp
+../include/utilities.hpp
+
 ../include/object3d.hpp
 ray.hpp
 ../include/ray.hpp
@@ -305,6 +313,8 @@ vecmath.h
 -
 object3d.hpp
 ../include/object3d.hpp
+utilities.hpp
+../include/utilities.hpp
 
 ../include/triangle.hpp
 object3d.hpp
@@ -427,6 +437,8 @@ revsurface.hpp
 /home/yikai/Documents/computer-graphics-project-2021-spring/src/revsurface.hpp
 rectangles.hpp
 /home/yikai/Documents/computer-graphics-project-2021-spring/src/rectangles.hpp
+move.hpp
+/home/yikai/Documents/computer-graphics-project-2021-spring/src/move.hpp
 
 /home/yikai/Documents/computer-graphics-project-2021-spring/src/texture.cpp
 texture.hpp

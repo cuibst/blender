@@ -81,7 +81,7 @@ public:
             box = BoundingBox::mergeBox(box, tmp);
     }
 
-    bool intersect(const Ray &r, Hit &h, float tmin) override
+    bool intersect(const Ray &r, Hit &h, float tmin, float T) override
     {
         // std::cout << "============" << std::endl;
         // std::cout << "ray is origin:" << r.getOrigin() << " direction:" << r.getDirection() << std::endl;
@@ -92,7 +92,7 @@ public:
         // std::cout << "intersected! mn:" << t_min << " " << " mx:" << t_max << std::endl;
         // std::cout << r.pointAtParameter(t_min) << " " << r.pointAtParameter(t_max) << std::endl;
         // std::cout << "============" << std::endl;
-        bool sh = obj->intersect(r, h, tmin), lh = lch ? lch->intersect(r, h, tmin) : false, rh = rch ? rch->intersect(r, h, tmin) : false;
+        bool sh = obj->intersect(r, h, tmin, T), lh = lch ? lch->intersect(r, h, tmin, T) : false, rh = rch ? rch->intersect(r, h, tmin, T) : false;
         return sh || (lh || rh);
     }
 

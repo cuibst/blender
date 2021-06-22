@@ -3,16 +3,9 @@
 
 #include <vecmath.h>
 #include "object3d.hpp"
+#include "utilities.hpp"
 
-static Vector3f transformPoint(const Matrix4f &mat, const Vector3f &point) {
-    return (mat * Vector4f(point, 1)).xyz();
-}
 
-// transform a 3D directino using a matrix, returning a direction
-// This function *does not* take the inverse tranpose for you.
-static Vector3f transformDirection(const Matrix4f &mat, const Vector3f &dir) {
-    return (mat * Vector4f(dir, 0)).xyz();
-}
 
 class Transform : public Object3D {
 public:
@@ -25,11 +18,11 @@ public:
     ~Transform() {
     }
 
-    virtual bool intersect(const Ray &r, Hit &h, float tmin) {
+    virtual bool intersect(const Ray &r, Hit &h, float tmin, float T) {
         Vector3f trSource = transformPoint(transform, r.getOrigin());
         Vector3f trDirection = transformDirection(transform, r.getDirection());
         Ray tr(trSource, trDirection);
-        bool inter = o->intersect(tr, h, tmin);
+        bool inter = o->intersect(tr, h, tmin, T);
         if (inter) {
             h.set(h.getT(), h.getU(), h.getV(), h.getMaterial(), transformDirection(transform.transposed(), h.getNormal()).normalized(), r);
         }

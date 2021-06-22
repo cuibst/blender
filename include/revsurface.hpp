@@ -91,7 +91,7 @@ public:
         return true;
     }
 
-    bool intersect(const Ray &r, Hit &h, float tmin) override {
+    bool intersect(const Ray &r, Hit &h, float tmin, float T) override {
         // (PA3 optional TODO): implement this for the ray-tracing routine using G-N iteration.
         float intermin, intermax;
         if(!box->intersect(r, intermin, intermax, tmin))

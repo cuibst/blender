@@ -25,7 +25,7 @@ public:
 
     ~Sphere() override = default;
 
-    bool intersect(const Ray &r, Hit &h, float tmin) override {
+    bool intersect(const Ray &r, Hit &h, float tmin, float T) override {
         //
         Vector3f originToCenter = center - r.getOrigin();
         float length1 = Vector3f::dot(r.getDirection(),originToCenter);

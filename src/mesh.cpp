@@ -6,7 +6,7 @@
 #include <utility>
 #include <sstream>
 
-bool Mesh::intersect(const Ray &r, Hit &h, float tmin) {
+bool Mesh::intersect(const Ray &r, Hit &h, float tmin, float T) {
 
     // Optional: Change this brute force method into a faster one.
     // bool result = false;
@@ -19,7 +19,7 @@ bool Mesh::intersect(const Ray &r, Hit &h, float tmin) {
     // }
     // std::cout << "intersect at " << h.getT() << std::endl;
     // return result;
-    return root->intersect(r, h, tmin);
+    return root->intersect(r, h, tmin, T);
 }
 
 Mesh::Mesh(const char *filename, Material *material) : Object3D(material) {
